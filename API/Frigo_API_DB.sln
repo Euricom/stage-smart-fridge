@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frigo_API_DB", "Frigo_API_DB\Frigo_API_DB.csproj", "{F6E9DA68-A754-4D48-AD3F-429559F3817B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{FA33E621-C2B5-4237-8D95-67549535369D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F6E9DA68-A754-4D48-AD3F-429559F3817B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6E9DA68-A754-4D48-AD3F-429559F3817B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6E9DA68-A754-4D48-AD3F-429559F3817B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6E9DA68-A754-4D48-AD3F-429559F3817B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA33E621-C2B5-4237-8D95-67549535369D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA33E621-C2B5-4237-8D95-67549535369D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA33E621-C2B5-4237-8D95-67549535369D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA33E621-C2B5-4237-8D95-67549535369D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AFFB4B16-25A5-415C-9F5C-D5E7782C34BD}
+	EndGlobalSection
+EndGlobal
