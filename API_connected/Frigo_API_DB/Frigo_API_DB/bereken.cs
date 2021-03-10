@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Frigo_API_DB
 {
-    public class bereken
+    public class Bereken
     {
         private List<DrankP> Fanta = new List<DrankP>();
         private List<DrankP> Cola = new List<DrankP>();
@@ -28,22 +28,22 @@ namespace Frigo_API_DB
             //Verdelen per tagnaam
             for(int i = 0; i < dranken.Count(); i++)
             {
-                if(dranken[i].tagname == "Cola-blik" && dranken[i].probability > 0.40)
+                if(dranken[i].Tagname == "Cola-blik" && dranken[i].Probability > 0.40)
                 {
                     Cola.Add(dranken[i]);
                 }
 
-                else if (dranken[i].tagname == "Fanta" && dranken[i].probability > 0.40)
+                else if (dranken[i].Tagname == "Fanta" && dranken[i].Probability > 0.40)
                 {
                     Fanta.Add(dranken[i]);
                 }
 
-                else if (dranken[i].tagname == "Sprite-Lemon-blik" && dranken[i].probability > 0.40)
+                else if (dranken[i].Tagname == "Sprite-Lemon-blik" && dranken[i].Probability > 0.40)
                 {
                     Sprite.Add(dranken[i]);
                 }
 
-                else if (dranken[i].tagname == "bovenkant" && dranken[i].probability > 0.40)
+                else if (dranken[i].Tagname == "bovenkant" && dranken[i].Probability > 0.40)
                 {
                     BovenkantenLijst.Add(dranken[i]);
                 }
@@ -57,7 +57,7 @@ namespace Frigo_API_DB
             //Middekanten van blik worden berekend.
             for (int i = 0; i < BovenkantenLijst.Count(); i++)
             {
-                centerPointsUpperside.Add(calculateThecenter(BovenkantenLijst[i].boundingBox));
+                centerPointsUpperside.Add(calculateThecenter(BovenkantenLijst[i].Boundingbox));
             }
             
 
@@ -89,7 +89,11 @@ namespace Frigo_API_DB
 
         public Zone makeTheZone(List<DrankP> drinken)
         {
-            double Links = drinken.Min(drank => drank.boundingBox.left);
+            //Oke wat heb i nodig:
+            // Mijn vluchtpunt en mijn basis (onderkanten van de voorste blikken of bovenkanten dit hangt af van waar ze staan op de foto).
+
+
+            double Links = drinken.Min(drank => drank.Boundingbox.Left);
 
             // Voor de rechter en onderkant moet ik eerst die kanten berekenen door de breedte erbij op
             // te tellen of de hoogtre ervanaf.
@@ -97,14 +101,14 @@ namespace Frigo_API_DB
             List<Double> rechterKanten = new List<double>();
             for(int i = 0; i < drinken.Count(); i++)
             {
-                rechterKanten.Add(drinken[i].boundingBox.left + drinken[i].boundingBox.width);
+                rechterKanten.Add(drinken[i].Boundingbox.Left + drinken[i].Boundingbox.Width);
             }
             double rechts = rechterKanten.Max();
 
             List<double> onderKanten = new List<double>();
             for (int i = 0; i < drinken.Count(); i++)
             {
-                onderKanten.Add(drinken[i].boundingBox.top - drinken[i].boundingBox.height);
+                onderKanten.Add(drinken[i].Boundingbox.Top - drinken[i].Boundingbox.Height);
             }
             double onderKant = onderKanten.Min();
 
@@ -119,8 +123,8 @@ namespace Frigo_API_DB
         {
             double x;
             double y;
-            x = circumference.left + circumference.width/2;
-            y = circumference.top - circumference.height/2;
+            x = circumference.Left + circumference.Width/2;
+            y = circumference.Top - circumference.Height/2;
             Point center = new Point(x, y);
             return center;
         }

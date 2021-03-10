@@ -25,7 +25,7 @@ namespace UnitTestProject1
 
         public void centerCalculator()
         {
-            bereken ber = new bereken();
+            Bereken ber = new Bereken();
             DrankP uperSideCan = new DrankP(string naam, float prob, int tag, double h, double l, double t, double w);
             ber.calculateThecenter(uperSideCan);
         }

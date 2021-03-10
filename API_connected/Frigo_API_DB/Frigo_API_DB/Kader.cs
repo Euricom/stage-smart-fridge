@@ -7,10 +7,10 @@ namespace Frigo_API_DB
 {
     public class kader
     {
-        public double height { get; set; }
-        public double left { get; set; }
-        public double top { get; set; }
-        public double width { get; set; }
+        public double Height { get; set; }
+        public double Left { get; set; }
+        public double Top { get; set; }
+        public double Width { get; set; }
 
 
         public kader()
@@ -19,10 +19,10 @@ namespace Frigo_API_DB
         }
         public kader(double h, double l, double t, double w)
         {
-            height = h;
-            left = l;
-            top = t;
-            width = w;
+            Height = h;
+            Left = l;
+            Top = t;
+            Width = w;
         }
     }
 }

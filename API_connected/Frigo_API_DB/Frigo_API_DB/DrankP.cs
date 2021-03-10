@@ -8,10 +8,10 @@ namespace Frigo_API_DB
 {
     public class DrankP
     {
-        public string tagname { get; set; }
-        public float probability { get; set; }
-        public int tagid { get; set; }
-        public  kader boundingBox { get; set; }
+        public string Tagname { get; set; }
+        public float Probability { get; set; }
+        public int Tagid { get; set; }
+        public  kader Boundingbox { get; set; }
 
         public DrankP()
         { 
@@ -20,18 +20,18 @@ namespace Frigo_API_DB
 
         public DrankP(string naam, float prob, int tag, kader k)
         {
-            tagname = naam;
-            probability = prob;
-            tagid = tag;
-            boundingBox = k;
+            Tagname = naam;
+            Probability = prob;
+            Tagid = tag;
+            Boundingbox = k;
         }
 
         public DrankP(string naam, float prob, int tag, double h, double l, double t, double w)
         {
-            tagname = naam;
-            probability = prob;
-            tagid = tag;
-            boundingBox = new kader(h, l, t, w);
+            Tagname = naam;
+            Probability = prob;
+            Tagid = tag;
+            Boundingbox = new kader(h, l, t, w);
         }
     }
 }

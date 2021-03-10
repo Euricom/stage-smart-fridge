@@ -31,10 +31,10 @@ namespace Frigo_API_DB.Controllers
             aantallen.Add(cola);
             aantallen.Add(fanta);
             aantallen.Add(sprite);
-            return aantallen;
+            //return aantallen;
 
             // Voor met de database te werken
-            //return frigoContext.Hoeveelheden.ToList();
+            return frigoContext.Hoeveelheden.ToList();
         }
 
         // GET api/<FrigoController>/5
@@ -47,7 +47,20 @@ namespace Frigo_API_DB.Controllers
         [HttpPost]
         public List<DrankP> Post(List<DrankP> dr)
         {
-            // klasse bereken aanmaken en hierin de data doorsturen die ik wil uitrekenen.
+            // data opsturen naar de berekeningen, uitrekenen en dan met de list data opslaan.
+            Bereken rekenen = new Bereken();
+            //List<Hoeveelheid> aantallen = rekenen.Counter(dr);
+
+            //for(int i = 0; i < aantallen.Count(); i++)
+            //{
+
+            //}
+            Hoeveelheid cola = frigoContext.Hoeveelheden.Single(c => c.Id == 1);
+            cola.Aantal = 10;
+
+            Hoeveelheid fanta = frigoContext.Hoeveelheden.Single(c => c.Id == 2);
+            fanta.Aantal = 10;
+            frigoContext.SaveChanges();
             return dr;
         }
 

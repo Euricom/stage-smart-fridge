@@ -13,18 +13,18 @@ namespace Frigo_API_DB
             rechts boven dit zijn. Wel veel denk werk.*/
 
         /*  Dit misschien als hoeken opslaan dan kan ik zien of het in de parallelogram zit */
-        public double onderKant { get; set; }
-        public double links { get; set; }
-        public double rechts { get; set; }
+        public double Onderkant { get; set; }
+        public double Links { get; set; }
+        public double Rechts { get; set; }
 
         
         
         
         public Zone(double l, double r, double o)
         {
-            links = l;
-            rechts = r;
-            onderKant = o;
+            Links = l;
+            Rechts = r;
+            Onderkant = o;
         }
 
         public int tellen(int a, int b)
