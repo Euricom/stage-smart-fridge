@@ -7,14 +7,6 @@ namespace UnitTestProject1
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod1()
-        {
-            Zone z = new Zone(1,2,3);
-            int expected = 5;
-            int actual = z.tellen(2, 3);
-            Assert.AreEqual(expected, actual);
-        }
-        [TestMethod]
         public void inDeZone()
         {
             Zone z = new Zone(1, 2, 3);
@@ -26,8 +18,23 @@ namespace UnitTestProject1
         public void centerCalculator()
         {
             Bereken ber = new Bereken();
-            DrankP uperSideCan = new DrankP(string naam, float prob, int tag, double h, double l, double t, double w);
-            ber.calculateThecenter(uperSideCan);
+            string naam = "cola";
+            double prob = 0.745;
+            int tag = 1;
+            double h = 0.321515185;
+            double l = 0.38555485;
+            double t = 0.74629482;
+            double w = 0.685265152;
+            DrankP uperSideCan = new DrankP(naam, prob, tag, h, l, t, w);
+            ber.calculateThecenter(uperSideCan.Boundingbox);
+        }
+
+        public void vanishPointChecker()
+        {
+            Bereken ber = new Bereken();
+            
+            Point P1 = new Point(1, 1);
+            Point P2 = new Point(2, 3);
         }
         
     }

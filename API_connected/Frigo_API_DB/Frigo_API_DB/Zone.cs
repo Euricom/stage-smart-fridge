@@ -27,15 +27,11 @@ namespace Frigo_API_DB
             Onderkant = o;
         }
 
-        public int tellen(int a, int b)
-        {
-            return a + b;
-        }
+     
 
         public bool inTheZone(Point centerPoint)
         {
-            // case 1 simpel een rechthoek maken
-            //case 2 iets moeilijker een parallelogram
+           
             return true;
         }
     }

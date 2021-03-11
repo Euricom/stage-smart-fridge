@@ -45,23 +45,23 @@ namespace Frigo_API_DB.Controllers
         }
 
         [HttpPost]
-        public List<DrankP> Post(List<DrankP> dr)
+        public Point Post(List<DrankP> dr)
         {
             // data opsturen naar de berekeningen, uitrekenen en dan met de list data opslaan.
+
             Bereken rekenen = new Bereken();
             //List<Hoeveelheid> aantallen = rekenen.Counter(dr);
+            Point vluchtpunt = rekenen.Counter(dr);
 
-            //for(int i = 0; i < aantallen.Count(); i++)
+            //for (int i = 0; i < aantallen.Count(); i++)
             //{
-
+            //    Hoeveelheid drankje = frigoContext.Hoeveelheden.Single(c => c.Id == aantallen[i].Id);
+            //    drankje.Aantal = aantallen[i].Aantal;
+            //    frigoContext.SaveChanges();
             //}
-            Hoeveelheid cola = frigoContext.Hoeveelheden.Single(c => c.Id == 1);
-            cola.Aantal = 10;
 
-            Hoeveelheid fanta = frigoContext.Hoeveelheden.Single(c => c.Id == 2);
-            fanta.Aantal = 10;
-            frigoContext.SaveChanges();
-            return dr;
+            return vluchtpunt;
+
         }
 
 
