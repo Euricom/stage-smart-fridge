@@ -21,13 +21,13 @@ namespace Frigo_API_DB.Controllers
         }
         // GET: api/<FrigoController>
         [HttpGet]
-        public List<Hoeveelheid> Get()
+        public List<Amounts> Get()
         {
             // Voor de demo
-            Hoeveelheid cola = new Hoeveelheid(1, "Cola", 7);
-            Hoeveelheid fanta = new Hoeveelheid(2, "Fanta", 15);
-            Hoeveelheid sprite = new Hoeveelheid(3, "Sprite", 0);
-            List<Hoeveelheid> aantallen = new List<Hoeveelheid>();
+            Amounts cola = new Amounts(1, "Cola", 7);
+            Amounts fanta = new Amounts(2, "Fanta", 15);
+            Amounts sprite = new Amounts(3, "Sprite", 0);
+            List<Amounts> aantallen = new List<Amounts>();
             aantallen.Add(cola);
             aantallen.Add(fanta);
             aantallen.Add(sprite);
@@ -45,13 +45,12 @@ namespace Frigo_API_DB.Controllers
         }
 
         [HttpPost]
-        public Point Post(List<DrankP> dr)
+        public List<Amounts> Post(List<RasPiInput> dr)
         {
             // data opsturen naar de berekeningen, uitrekenen en dan met de list data opslaan.
 
-            Bereken rekenen = new Bereken();
-            //List<Hoeveelheid> aantallen = rekenen.Counter(dr);
-            Point vluchtpunt = rekenen.Counter(dr);
+            Calculating rekenen = new Calculating();
+            List<Amounts> aantallen = rekenen.Counter(dr);
 
             //for (int i = 0; i < aantallen.Count(); i++)
             //{
@@ -60,7 +59,7 @@ namespace Frigo_API_DB.Controllers
             //    frigoContext.SaveChanges();
             //}
 
-            return vluchtpunt;
+            return aantallen;
 
         }
 

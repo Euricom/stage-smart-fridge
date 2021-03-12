@@ -12,17 +12,17 @@ namespace Frigo_API_DB.Data
         {
         }
 
-        public DbSet<Hoeveelheid> Hoeveelheden { get; set; }
+        public DbSet<Amounts> Hoeveelheden { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             base.OnModelCreating(modelBuilder);
-            var hoeveelheid = modelBuilder.Entity<Hoeveelheid>();
+            var hoeveelheid = modelBuilder.Entity<Amounts>();
             hoeveelheid.ToTable("Hoeveelheden");
             hoeveelheid.HasKey("Id").IsClustered();
             hoeveelheid.Property("Id").ValueGeneratedOnAdd().IsRequired().HasColumnName("Id");
-            hoeveelheid.Property(nameof(Hoeveelheid.Aantal)).IsRequired().HasColumnName("Aantal");
-            hoeveelheid.Property(nameof(Hoeveelheid.Naam)).IsRequired().HasColumnName("Naam");
+            hoeveelheid.Property(nameof(Amounts.Amount)).IsRequired().HasColumnName("Aantal");
+            hoeveelheid.Property(nameof(Amounts.Name)).IsRequired().HasColumnName("Naam");
 
             modelBuilder.Seed();
 

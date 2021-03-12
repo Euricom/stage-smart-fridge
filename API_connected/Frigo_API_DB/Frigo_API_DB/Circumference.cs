@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Frigo_API_DB
 {
-    public class kader
+    public class Circumference
     {
         public double Height { get; set; }
         public double Left { get; set; }
@@ -13,11 +13,11 @@ namespace Frigo_API_DB
         public double Width { get; set; }
 
 
-        public kader()
+        public Circumference()
         {
             // Hier gebeurd niets, maar dit is nodig om de json data die via de post binnenkomt op te vangen.
         }
-        public kader(double h, double l, double t, double w)
+        public Circumference(double h, double l, double t, double w)
         {
             Height = h;
             Left = l;

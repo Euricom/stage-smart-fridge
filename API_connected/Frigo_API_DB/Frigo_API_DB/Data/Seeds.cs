@@ -10,9 +10,9 @@ namespace Frigo_API_DB.Data
     {
         public static void Seed(this ModelBuilder model)
         {
-            model.Entity<Hoeveelheid>().HasData(new Hoeveelheid { Id = 1, Naam = "Cola-blik", Aantal = 0 },
-               new Hoeveelheid { Id = 2, Naam = "Fanta", Aantal = 0 },
-               new Hoeveelheid { Id = 3, Naam = "Sprite-Lemon-blik", Aantal = 0 });
+            model.Entity<Amounts>().HasData(new Amounts { Id = 1, Name = "Cola-blik", Amount = 0 },
+               new Amounts { Id = 2, Name = "Fanta", Amount = 0 },
+               new Amounts { Id = 3, Name = "Sprite-Lemon-blik", Amount = 0 });
 
         }
     }

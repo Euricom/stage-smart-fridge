@@ -6,19 +6,19 @@ using System.Web;
 
 namespace Frigo_API_DB
 {
-    public class DrankP
+    public class RasPiInput
     {
         public string Tagname { get; set; }
         public double Probability { get; set; }
         public int Tagid { get; set; }
-        public  kader Boundingbox { get; set; }
+        public  Circumference Boundingbox { get; set; }
 
-        public DrankP()
+        public RasPiInput()
         { 
             // Hier gebeurd niets, maar dit is nodig om de json data die via de post binnenkomt op te vangen.
         }
 
-        public DrankP(string naam, float prob, int tag, kader k)
+        public RasPiInput(string naam, float prob, int tag, Circumference k)
         {
             Tagname = naam;
             Probability = prob;
@@ -26,12 +26,12 @@ namespace Frigo_API_DB
             Boundingbox = k;
         }
 
-        public DrankP(string naam, double prob, int tag, double h, double l, double t, double w)
+        public RasPiInput(string naam, double prob, int tag, double h, double l, double t, double w)
         {
             Tagname = naam;
             Probability = prob;
             Tagid = tag;
-            Boundingbox = new kader(h, l, t, w);
+            Boundingbox = new Circumference(h, l, t, w);
         }
     }
 }
