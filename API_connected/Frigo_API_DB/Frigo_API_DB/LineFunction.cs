@@ -13,6 +13,11 @@ namespace Frigo_API_DB
 
         public double VerticalTranslation { get; set; }
 
+
+        public LineFunction()
+        {
+
+        }
         public LineFunction(Point p1, Point p2)
         {
             // Opstellen functie van een rechte :
@@ -24,8 +29,8 @@ namespace Frigo_API_DB
             }
             else
             {
-                Slope = (p1.Y - p2.Y) / (p1.X - p2.X);
-                VerticalTranslation = p1.Y - Slope * p1.X;
+                Slope = Math.Round((p1.Y - p2.Y) / (p1.X - p2.X),10);
+                VerticalTranslation = Math.Round(p1.Y - Slope * p1.X,10);
             }
             
         }
@@ -47,8 +52,8 @@ namespace Frigo_API_DB
             }
 
 
-            Point Vluchtpunt = new Point(x,y);
-            return Tuple.Create(true,Vluchtpunt);
+            Point intersection = new Point(x,y);
+            return Tuple.Create(true,intersection);
         }
     }
 }

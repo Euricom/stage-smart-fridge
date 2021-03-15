@@ -11,9 +11,10 @@ namespace Frigo_API_DB
         private List<RasPiInput> cola = new List<RasPiInput>();
         private List<RasPiInput> sprite = new List<RasPiInput>();
         private List<RasPiInput> upperSideList = new List<RasPiInput>();
-        private List<RasPiInput> vanishingLineCircumference = new List<RasPiInput>();
+        public List<RasPiInput> VanishingLineCircumference = new List<RasPiInput>();
 
-        private Point vanishingPoint;
+        public List<LineFunction> VanishingLines = new List<LineFunction>();
+        public Point VanishingPoint;
 
         private List<Point> centerPointsUpperside = new List<Point>();
 
@@ -55,11 +56,12 @@ namespace Frigo_API_DB
                 }
                 else if (dranken[i].Tagname == "VluchtLijn" && dranken[i].Probability > 0)
                 {
-                    vanishingLineCircumference.Add(dranken[i]);
+                    VanishingLineCircumference.Add(dranken[i]);
                 }
             }
 
             //Zone per tagnaam maken
+            calculateVanishingLines();
             calculateVanishingpoint();
 
 
@@ -86,52 +88,51 @@ namespace Frigo_API_DB
             return result;
         }
 
-
-        public void calculateVanishingpoint()
+        public void calculateVanishingLines()
         {
-            List<LineFunction> vanishingLines = new List<LineFunction>();
-
             // Dit berekent de coordinaten van de de lijn. Height moet opgeteld worden omdat de Yas naar beneden staat.
-            for ( int i = 0; i < vanishingLineCircumference.Count(); i++)
+            for (int i = 0; i < VanishingLineCircumference.Count(); i++)
             {
-                if(vanishingLineCircumference[i].Boundingbox.Left < 0.2)
+                if (VanishingLineCircumference[i].Boundingbox.Left < 0.2)
                 {
-                    double x1 = vanishingLineCircumference[i].Boundingbox.Left;
-                    double y1 = vanishingLineCircumference[i].Boundingbox.Top + vanishingLineCircumference[i].Boundingbox.Height;
+                    double x1 = VanishingLineCircumference[i].Boundingbox.Left;
+                    double y1 = VanishingLineCircumference[i].Boundingbox.Top + VanishingLineCircumference[i].Boundingbox.Height;
                     Point bottomLeftSide = new Point(x1, y1);
 
-                    double x2 = vanishingLineCircumference[i].Boundingbox.Left + vanishingLineCircumference[i].Boundingbox.Width;
-                    double y2 = vanishingLineCircumference[i].Boundingbox.Top;
+                    double x2 = VanishingLineCircumference[i].Boundingbox.Left + VanishingLineCircumference[i].Boundingbox.Width;
+                    double y2 = VanishingLineCircumference[i].Boundingbox.Top;
                     Point upperRichtSide = new Point(x2, y2);
 
                     LineFunction r = new LineFunction(bottomLeftSide, upperRichtSide);
-                    vanishingLines.Add(r);
+                    VanishingLines.Add(r);
                 }
 
                 else
                 {
-                    double X1 = vanishingLineCircumference[i].Boundingbox.Left;
-                    double Y1 = vanishingLineCircumference[i].Boundingbox.Top;
+                    double X1 = VanishingLineCircumference[i].Boundingbox.Left;
+                    double Y1 = VanishingLineCircumference[i].Boundingbox.Top;
                     Point linksBoven = new Point(X1, Y1);
 
-                    double X2 = vanishingLineCircumference[i].Boundingbox.Left + vanishingLineCircumference[i].Boundingbox.Width;
-                    double Y2 = vanishingLineCircumference[i].Boundingbox.Top + vanishingLineCircumference[i].Boundingbox.Height;
+                    double X2 = VanishingLineCircumference[i].Boundingbox.Left + VanishingLineCircumference[i].Boundingbox.Width;
+                    double Y2 = VanishingLineCircumference[i].Boundingbox.Top + VanishingLineCircumference[i].Boundingbox.Height;
                     Point rechtsOnder = new Point(X2, Y2);
 
                     LineFunction r = new LineFunction(linksBoven, rechtsOnder);
-                    vanishingLines.Add(r);
+                    VanishingLines.Add(r);
                 }
             }
+        }
 
-            // Dan intersectie zoeken. 
+        public void calculateVanishingpoint()
+        {
             bool parallel;
             List<Point> points = new List<Point>();
-            for(int i = 0; i < vanishingLines.Count() -1; i++)
+            for(int i = 0; i < VanishingLines.Count() -1; i++)
             {
-                for(int j = i+1; j < vanishingLines.Count(); j++)
+                for(int j = i+1; j < VanishingLines.Count(); j++)
                 {
                     Point point;
-                    (parallel, point) = vanishingLines[i].intersection(vanishingLines[j]);
+                    (parallel, point) = VanishingLines[i].intersection(VanishingLines[j]);
                     if (parallel)
                     {
                         points.Add(point);
@@ -151,9 +152,7 @@ namespace Frigo_API_DB
 
             double x = sumX / points.Count();
             double y = somY / points.Count();
-            this.vanishingPoint = new Point(x, y);
-
-
+            this.VanishingPoint = new Point(x, y);
         }
 
         // Nog opvangen als ik een horizontale lijn krijg.
@@ -177,7 +176,7 @@ namespace Frigo_API_DB
             double y1 = frontSide[minLeftId].Boundingbox.Top;
             Point left = new Point(x1, y1);
 
-            LineFunction r1 = new LineFunction(left, vanishingPoint);
+            LineFunction r1 = new LineFunction(left, VanishingPoint);
             zone.Add(r1);
 
 
@@ -196,7 +195,7 @@ namespace Frigo_API_DB
             double y2 = frontSide[maxRightId].Boundingbox.Top;
             Point rechts = new Point(x2, y2);
 
-            LineFunction r2 = new LineFunction(rechts, vanishingPoint);
+            LineFunction r2 = new LineFunction(rechts, VanishingPoint);
             zone.Add(r2);
 
             return zone;
@@ -234,7 +233,7 @@ namespace Frigo_API_DB
             double x;
             double y;
             x = circumference.Left + circumference.Width/2;
-            y = circumference.Top - circumference.Height/2;
+            y = circumference.Top + circumference.Height/2;
             Point center = new Point(x, y);
             return center;
         }

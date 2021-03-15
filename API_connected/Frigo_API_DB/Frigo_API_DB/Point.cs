@@ -12,8 +12,8 @@ namespace Frigo_API_DB
 
         public Point(double xCoordinate, double yCoordinate)
         {
-            X = xCoordinate;
-            Y = yCoordinate;
+            X = Math.Round(xCoordinate,10);
+            Y = Math.Round(yCoordinate,10);
         }
     }
 }
