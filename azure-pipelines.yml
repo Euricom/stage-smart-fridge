@@ -15,3 +15,7 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'Frigo_API_DB/Frigo_API_DB.sln'
