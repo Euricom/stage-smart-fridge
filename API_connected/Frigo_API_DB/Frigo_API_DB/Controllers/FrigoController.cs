@@ -45,22 +45,24 @@ namespace Frigo_API_DB.Controllers
         }
 
         [HttpPost]
-        public List<Amounts> Post(List<RasPiInput> dr)
+        public int Post(List<RasPiInput> dr)
         {
             // data opsturen naar de berekeningen, uitrekenen en dan met de list data opslaan.
 
-            Calculating rekenen = new Calculating();
-            List<Amounts> aantallen = rekenen.Counter(dr);
+            //Calculating rekenen = new Calculating();
+            //List<Amounts> aantallen = rekenen.Counter(dr);
 
             //for (int i = 0; i < aantallen.Count(); i++)
             //{
-            //    Hoeveelheid drankje = frigoContext.Hoeveelheden.Single(c => c.Id == aantallen[i].Id);
-            //    drankje.Aantal = aantallen[i].Aantal;
+            //    Amounts drankje = frigoContext.Hoeveelheden.Single(c => c.Id == aantallen[i].Id);
+            //    drankje.Amount = aantallen[i].Amount;
             //    frigoContext.SaveChanges();
             //}
 
-            return aantallen;
 
+
+
+            return 5;
         }
 
 

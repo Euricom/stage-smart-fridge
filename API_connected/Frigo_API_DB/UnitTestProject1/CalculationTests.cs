@@ -4,27 +4,27 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace UnitTestProject1
+namespace UnitTestFrigo
 {
     [TestClass]
-    public class UnitTests
+    public class CalculationTests
     {
         [TestMethod]
-        public void centerCalculator()
+        public void Calculator_Should_Calculate_The_Center_Of_Circumference()
         {
             Calculating ber = new Calculating();
-            double height = 2;
+            double height = 0;
             double left = 1;
-            double top = 1;
-            double width = 2;
+            double top = 4;
+            double width = 0;
             Circumference uperSideCan = new Circumference(height, left, top, width);
             Point calculator = ber.calculateThecenter(uperSideCan);
-            Point expected = new Point(2, 2);
+            Point expected = new Point(1, 4);
             Assert.AreEqual(calculator.Y, expected.Y);
         }
 
         [TestMethod]
-        public void makeVanishLines()
+        public void Calculator_Should_Calculate_VanishingLines_From_Circomferences()
         {
             // stappen:
             // arrange alles opzetten 
@@ -59,33 +59,10 @@ namespace UnitTestProject1
             
         }
 
-        [TestMethod]
-        public void intersect()
-        {
-            //Arrange
-            LineFunction line1 = new LineFunction();
-            line1.Slope = 13;
-            line1.VerticalTranslation = 27;
-
-            LineFunction line2 = new LineFunction();
-            line2.Slope = 7;
-            line2.VerticalTranslation = -5;
-
-            bool good;
-            Point intersection;
-            Point expectedIntersection = new Point(-16.0/3.0, -127.0/3.0);
-
-            //act
-            (good, intersection) = line1.intersection(line2);
-
-            //Assert
-            Assert.IsTrue(good);
-            Assert.AreEqual(expectedIntersection.X, intersection.X);
-            Assert.AreEqual(expectedIntersection.Y, intersection.Y);
-        }
+       
 
         [TestMethod]
-        public void zoneMaker()
+        public void Calculator_Should_Make_The_Zone_From_VanishingPoint_LiftSide_And_RightSide()
         {
             //Arrange
             List<LineFunction> zone = new List<LineFunction>();
@@ -114,15 +91,40 @@ namespace UnitTestProject1
             zone = cal.makeTheZone(voorkanten);
 
             //Assert
-            //links
-            Assert.AreEqual(zone[0].Slope, 1);
-            Assert.AreEqual(zone[0].VerticalTranslation, 0);
+                //links
+                Assert.AreEqual(zone[0].Slope, 1);
+                Assert.AreEqual(zone[0].VerticalTranslation, 0);
 
-            //rechts
-            Assert.AreEqual(zone[1].Slope, -0.75);
-            Assert.AreEqual(zone[1].VerticalTranslation, 0.875);
+                //rechts
+                Assert.AreEqual(zone[1].Slope, -0.75);
+                Assert.AreEqual(zone[1].VerticalTranslation, 0.875);
         }
 
+        [TestMethod]
+        public void Calculator_Should_Calculate_If_A_Point_Is_In_Or_Out_A_Zone()
+        {
+            //Arrange
+            Calculating cal = new Calculating();
+            List<LineFunction> zone = new List<LineFunction>();
+            Point vanishingPoint = new Point(5, 7);
+            Point pointLine1 = new Point(4, 3);
+            LineFunction L1 = new LineFunction(pointLine1,vanishingPoint);
+            Point pointLine2 = new Point(8, 2);
+            LineFunction L2 = new LineFunction(pointLine2, vanishingPoint);
 
+            zone.Add(L1);
+            zone.Add(L2);
+            List<Point> centers = new List<Point>();
+            Point p = new Point(10, 3);
+            centers.Add(p);
+
+            //Act
+            int inside = cal.inTheZone(centers, zone);
+
+            //Assert
+            Assert.AreEqual(inside, 1);
+
+
+        }
     }
 }
