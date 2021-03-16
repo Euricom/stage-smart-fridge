@@ -18,4 +18,4 @@ steps:
 - task: DotNetCoreCLI@0
   inputs:
     command: 'build'
-    projects: 'Frigo_API_DB/Frigo_API_DB.sln'
+    projects: './Frigo_API_DB/Frigo_API_DB.sln'
