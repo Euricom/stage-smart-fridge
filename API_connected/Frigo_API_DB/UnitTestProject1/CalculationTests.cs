@@ -26,8 +26,7 @@ namespace UnitTestFrigo
         [TestMethod]
         public void Calculator_Should_Calculate_VanishingLines_From_Circomferences()
         {
-            // stappen:
-            // arrange alles opzetten 
+            // arrange
             Calculating cal = new Calculating();
             double height1 = 0.3;
             double left1 = 0.1;
@@ -58,8 +57,43 @@ namespace UnitTestFrigo
             Assert.AreEqual(cal.VanishingLines[1].VerticalTranslation, -1.2);
             
         }
+        [TestMethod]
+        public void Calculator_Should_Return_Bad1_If_No_Good_Values_Are_Given_For_VanishLines()
+        {
+            //Arrange
+            Calculating cal = new Calculating();
+            List<RasPiInput> rasPiData = new List<RasPiInput>();
+            RasPiInput data1 = new RasPiInput("cola", 0.1, 1, 0.4, 0.5, 0.4, 0.8);
+            rasPiData.Add(data1);
+            List<Amounts> returnValue = new List<Amounts>();
+            
 
-       
+            //Act
+            returnValue = cal.Counter(rasPiData);
+            //Assert
+            Assert.AreEqual(returnValue[0].Name, "Bad1");
+        }
+
+        [TestMethod]
+        public void Calculator_Should_Return_false_If_No_VanishingPoint_Was_Calculated()
+        {
+            //Arrange
+            Calculating cal = new Calculating();
+
+            Point p1 = new Point(1, 2);
+            Point p2 = new Point(2, 3);
+            LineFunction l1 = new LineFunction(p1, p2);
+            LineFunction l2 = new LineFunction(p1, p2);
+            cal.VanishingLines.Add(l1);
+            cal.VanishingLines.Add(l2);
+            bool returnValue;
+
+            //Act
+            returnValue = cal.calculateVanishingpoint();
+
+            //Assert
+            Assert.IsFalse(returnValue);
+        }
 
         [TestMethod]
         public void Calculator_Should_Make_The_Zone_From_VanishingPoint_LiftSide_And_RightSide()
@@ -115,7 +149,7 @@ namespace UnitTestFrigo
             zone.Add(L1);
             zone.Add(L2);
             List<Point> centers = new List<Point>();
-            Point p = new Point(100, 3);
+            Point p = new Point(6, 3);
             centers.Add(p);
 
             //Act

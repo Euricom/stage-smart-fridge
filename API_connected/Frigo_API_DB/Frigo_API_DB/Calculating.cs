@@ -21,17 +21,21 @@ namespace Frigo_API_DB
         private List<LineFunction> colaZone = new List<LineFunction>();
         private List<LineFunction> fantaZone = new List<LineFunction>();
         private List<LineFunction> spriteZone = new List<LineFunction>();
+        bool cZone;
+        bool fZone;
+        bool sZone;
 
-        private int fantaAmount = 0;
-        private int colaAmount = 0;
-        private int spriteAmount = 0;
+        private int fantaTotal = 0;
+        private int colaTotal = 0;
+        private int spriteTotal = 0;
         
-        private List<Amounts> result = new List<Amounts>();
+        
         
         
        
         public List<Amounts> Counter(List<RasPiInput> dranken)
         {
+            List<Amounts> result = new List<Amounts>();
             //Verdelen per tagnaam
             for(int i = 0; i < dranken.Count(); i++)
             {
@@ -60,31 +64,86 @@ namespace Frigo_API_DB
                 }
             }
 
-            //Zone per tagnaam maken
+            if(VanishingLineCircumference.Count() < 2)
+            {
+                Amounts fout = new Amounts(0, "Bad1", 0);
+                result.Add(fout);
+                return result;
+            }
+
             calculateVanishingLines();
-            calculateVanishingpoint();
+            bool vP = calculateVanishingpoint();
+            if (vP == false)
+            {
+                Amounts fout = new Amounts(0, "Bad2", 0);
+                result.Add(fout);
+                return result;
+            }
+
+            if (this.fanta.Count() > 0)
+            {
+                fantaZone = makeTheZone(this.fanta);
+                fZone = true;
+            }
+            else
+            {
+                fZone = false;
+            }
+            if (this.cola.Count() > 0)
+            {
+                colaZone = makeTheZone(this.cola);
+                cZone = true;
+            }
+            else
+            {
+                cZone = false;
+            }
+            if (this.sprite.Count() > 0)
+            {
+                spriteZone = makeTheZone(this.sprite);
+                sZone = true;
+                
+            }
+            else
+            {
+                sZone = false;
+            }
 
 
-            fantaZone = makeTheZone(this.fanta);
-            colaZone = makeTheZone(this.cola);
-            spriteZone = makeTheZone(this.sprite);
-            
+
             //Middekanten van blik worden berekend.
             for (int i = 0; i < upperSideList.Count(); i++)
             {
                 centerPointsUpperside.Add(calculateThecenter(upperSideList[i].Boundingbox));
             }
 
-            fantaAmount = inTheZone(centerPointsUpperside, fantaZone);
-            colaAmount = inTheZone(centerPointsUpperside, colaZone);
-            spriteAmount = inTheZone(centerPointsUpperside, spriteZone);
+            if (centerPointsUpperside.Count() == 0)
+            {
+                Amounts fout = new Amounts(0, "Bad3", 0);
+                result.Add(fout);
+                return result;
+            }
 
-            Amounts colaTotal = new Amounts(1, "Cola-blik", colaAmount);
-            Amounts fantaTotal = new Amounts(2, "Fanta", fantaAmount);
-            Amounts spriteTotal = new Amounts(3, "Sprite-Lemon-blik", spriteAmount);
-            result.Add(colaTotal);
-            result.Add(fantaTotal);
-            result.Add(spriteTotal);
+            if(fZone)
+            {
+                this.fantaTotal = inTheZone(centerPointsUpperside, fantaZone);
+            }
+            if (cZone)
+            {
+                this.colaTotal = inTheZone(centerPointsUpperside, colaZone);
+            }
+            if (sZone)
+            {
+                this.spriteTotal = inTheZone(centerPointsUpperside, spriteZone);
+            }
+            
+
+            Amounts colaAmount = new Amounts(1, "Cola-blik", colaTotal);
+            Amounts fantaAmount = new Amounts(2, "Fanta", fantaTotal);
+            Amounts spriteAmount = new Amounts(3, "Sprite-Lemon-blik", spriteTotal);
+            result.Add(colaAmount);
+            result.Add(fantaAmount);
+            result.Add(spriteAmount);
             return result;
         }
 
@@ -111,19 +170,19 @@ namespace Frigo_API_DB
                 {
                     double X1 = VanishingLineCircumference[i].Boundingbox.Left;
                     double Y1 = VanishingLineCircumference[i].Boundingbox.Top;
-                    Point linksBoven = new Point(X1, Y1);
+                    Point leftUpperSide = new Point(X1, Y1);
 
                     double X2 = VanishingLineCircumference[i].Boundingbox.Left + VanishingLineCircumference[i].Boundingbox.Width;
                     double Y2 = VanishingLineCircumference[i].Boundingbox.Top + VanishingLineCircumference[i].Boundingbox.Height;
-                    Point rechtsOnder = new Point(X2, Y2);
+                    Point rightBottomSide = new Point(X2, Y2);
 
-                    LineFunction r = new LineFunction(linksBoven, rechtsOnder);
+                    LineFunction r = new LineFunction(leftUpperSide, rightBottomSide);
                     VanishingLines.Add(r);
                 }
             }
         }
 
-        public void calculateVanishingpoint()
+        public bool calculateVanishingpoint()
         {
             bool parallel;
             List<Point> points = new List<Point>();
@@ -139,7 +198,10 @@ namespace Frigo_API_DB
                     }
                 }
             }
-
+            if (points.Count() == 0)
+            {
+                return false;
+            }
             //Bij meerdere vluchtlijn gemiddelde berekenen
             double sumX = 0;
             double somY = 0;
@@ -153,9 +215,10 @@ namespace Frigo_API_DB
             double x = sumX / points.Count();
             double y = somY / points.Count();
             this.VanishingPoint = new Point(x, y);
+            return true;
         }
 
-        // Nog opvangen als ik een horizontale lijn krijg.
+        
         public List<LineFunction> makeTheZone(List<RasPiInput> frontSide)
         {
             List<LineFunction> zone = new List<LineFunction>();
@@ -177,7 +240,11 @@ namespace Frigo_API_DB
             Point left = new Point(x1, y1);
 
             LineFunction r1 = new LineFunction(left, VanishingPoint);
-            zone.Add(r1);
+            if(r1.Slope != 0)
+            {
+                zone.Add(r1);
+            }
+            
 
 
             //Zelfde voor rechts
@@ -196,7 +263,10 @@ namespace Frigo_API_DB
             Point rechts = new Point(x2, y2);
 
             LineFunction r2 = new LineFunction(rechts, VanishingPoint);
-            zone.Add(r2);
+            if (r2.Slope != 0)
+            {
+                zone.Add(r2);
+            }
 
             return zone;
         }
@@ -207,7 +277,7 @@ namespace Frigo_API_DB
             // Zoek X in functie van Y en dan het punt invullen en kijken of het langs de goede kant van de lijn ligt.
             // De zone is steeds zo opgebouwd dat de eerste rechte de linker is en de 2de de rechter
             // funcite in x:   X=Y/a-b/a
-            int amount = 0;
+            int Total = 0;
             for (int i = 0; i < centers.Count(); i++)
             {
                 double xLineLeft = centers[i].Y / zone[0].Slope - zone[0].VerticalTranslation / zone[0].Slope;
@@ -216,12 +286,12 @@ namespace Frigo_API_DB
                                 
                 if(xLineLeft < x && x < xLijnRight)
                 {
-                    amount++;
+                    Total++;
                 }
             }
             
             //aanpassen
-            return amount;
+            return Total;
            
         }
 
