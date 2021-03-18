@@ -21,7 +21,7 @@ namespace Frigo_API_DB.Controllers
         }
         // GET: api/<FrigoController>
         [HttpGet]
-        public List<Amounts> Get()
+        public Amounts Get()
         {
             // Voor de demo
             Amounts cola = new Amounts(1, "Cola", 7);
@@ -34,7 +34,9 @@ namespace Frigo_API_DB.Controllers
             //return aantallen;
 
             // Voor met de database te werken
-            return frigoContext.Hoeveelheden.ToList();
+            //return frigoContext.Hoeveelheden.ToList();
+            Amounts test = new Amounts(0, "test", 0);
+            return test;
         }
 
         // GET api/<FrigoController>/5
