@@ -28,3 +28,11 @@ steps:
     projects: '**/*.csproj'
     testRunTitle: 'Test'
     workingDirectory: 'API_connected'
+
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    workingDirectory: 'API_connected'
+
