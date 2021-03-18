@@ -36,3 +36,8 @@ steps:
     publishWebProjects: true
     workingDirectory: 'API_connected'
 
+- task: FileTransform@1
+  inputs:
+    folderPath: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    fileType: 'json'
+    targetFiles: '**/appsettings.json'
