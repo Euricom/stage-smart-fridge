@@ -9,8 +9,8 @@
     </tr>
     <tr *ngFor="let drink of dr"  [ngStyle]="{'background-color': drink.aantal>5? 'green' : 'red'}">
         <td>{{drink.id}}</td>
-        <td>{{drink.naam}}</td>
-        <td>{{drink.aantal}}</td>
+        <td>{{drink.name}}</td>
+        <td>{{drink.amount}}</td>
     </tr>
 </table>
 

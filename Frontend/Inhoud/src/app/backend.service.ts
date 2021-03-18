@@ -30,7 +30,7 @@ export class BackendService
 
 
 
-    const url = "https://frigo20210224093127.azurewebsites.net/Frigo";
+    const url = "https://frigoapistudents.azurewebsites.net/frigo";
     return this.http.get<Drinken[]>(url, requestOptions);
   }
 
