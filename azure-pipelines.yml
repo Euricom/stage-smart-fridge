@@ -21,3 +21,10 @@ steps:
     command: 'build'
     projects: '**/*.sln'
     workingDirectory: 'API_connected'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*.csproj'
+    testRunTitle: 'Test'
+    workingDirectory: 'API_connected'
