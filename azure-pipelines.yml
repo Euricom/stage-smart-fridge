@@ -41,3 +41,13 @@ steps:
     folderPath: '$(System.DefaultWorkingDirectory)/**/*.zip'
     fileType: 'json'
     targetFiles: '**/appsettings.json'
+
+
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure for Students(31789148-e41e-416d-8fd1-f9fe0201b29b)'
+    appType: 'webApp'
+    WebAppName: 'frigo-API'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
