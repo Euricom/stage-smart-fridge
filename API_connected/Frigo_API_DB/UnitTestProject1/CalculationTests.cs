@@ -149,7 +149,7 @@ namespace UnitTestFrigo
             zone.Add(L1);
             zone.Add(L2);
             List<Point> centers = new List<Point>();
-            Point p = new Point(6, 3);
+            Point p = new Point(100, 3);
             centers.Add(p);
 
             //Act
