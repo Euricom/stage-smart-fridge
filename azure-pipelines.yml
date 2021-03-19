@@ -43,14 +43,12 @@ steps:
     targetFiles: '**/appsettings.json'
 
 
-
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: 'Azure for Students(31789148-e41e-416d-8fd1-f9fe0201b29b)'
+    azureSubscription: 'Visual Studio Enterprise-abonnement – MPN(af06843c-c958-4e79-925d-145d2e54d2fd)'
     appType: 'webApp'
-    WebAppName: 'frigo-API'
+    WebAppName: 'FrigoAPIEuricom'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-
 
 
