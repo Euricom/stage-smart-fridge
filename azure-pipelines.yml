@@ -51,3 +51,6 @@ steps:
     appType: 'webApp'
     WebAppName: 'frigo-API'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+
+
