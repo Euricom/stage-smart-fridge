@@ -30,7 +30,13 @@ namespace Frigo_API_DB
             
             services.AddControllers();
             services.AddDbContext<Data.FridgeDbContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("connectie")); });
+                options.UseSqlServer(Configuration.GetConnectionString("connectie"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure();
+                    }
+                  
+                    ); });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Frigo_API_DB", Version = "v1" });

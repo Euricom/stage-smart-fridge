@@ -4,7 +4,7 @@
       "type": "secrets.user"
     },
     "mssql1": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/frigodbserver/databases/Frigo_db",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/frigoservereuricom/databases/FrigoDB",
       "type": "mssql.azure",
       "connectionId": "Frigo_db",
       "secretStore": "LocalSecretsFile"
