@@ -70,6 +70,20 @@ namespace Frigo_API_DB.Controllers
 
             return "Good";
         }
+        [HttpPost]
+        public bool Post(Person login)
+        {
+            if (login.Register == true)
+            {
+                frigoContext.Persons.Add(login);
+                frigoContext.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return login.rightPassword(frigoContext.Persons.ToList());
+            }
+        }
 
 
 
