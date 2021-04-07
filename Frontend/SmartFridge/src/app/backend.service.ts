@@ -21,7 +21,7 @@ export class BackendService {
     const requestOptions = {                                                                                                                                                                                 
       headers: new HttpHeaders(headerDict), 
     };
-    const url = "https://frigoapistudents.azurewebsites.net/frigo";
+    const url = "https://frigoapieuricom.azurewebsites.net/Frigo";
     return this.http.get<Beverage[]>(url, requestOptions);
   }
 

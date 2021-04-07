@@ -46,7 +46,7 @@ namespace Frigo_API_DB.Controllers
             return "value";
         }
 
-        [HttpPost]
+        [HttpPost("{rasPi}")]
         public string Post(List<RasPiInput> dr)
         {
             // data opsturen naar de berekeningen, uitrekenen en dan met de list data opslaan.
@@ -70,19 +70,19 @@ namespace Frigo_API_DB.Controllers
 
             return "Good";
         }
-        [HttpPost]
-        public bool Post(Person login)
+
+
+        [HttpPost("{login}")]
+        public bool PostLogin(Person login)
         {
-            if (login.Register == true)
-            {
-                frigoContext.Persons.Add(login);
-                frigoContext.SaveChanges();
-                return true;
-            }
-            else
-            {
-                return login.rightPassword(frigoContext.Persons.ToList());
-            }
+            return login.rightPassword(frigoContext.Persons.ToList());
+        }
+
+        [HttpPost("{register}")]
+        public void PostRegister(Person register)
+        {
+            frigoContext.Persons.Add(register);
+            frigoContext.SaveChanges();
         }
 
 
