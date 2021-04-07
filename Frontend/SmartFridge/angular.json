@@ -96,7 +96,7 @@
             ],
             "styles": [
               {
-                "input": "src/theme.scss"
+                "input": "src/ownTheme.scss"
               },
               "src/styles.css"
             ],

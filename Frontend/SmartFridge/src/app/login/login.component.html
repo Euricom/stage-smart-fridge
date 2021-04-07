@@ -1,23 +1,17 @@
-<mat-card class="c1">
-    <mat-card-title>
-        title
-    </mat-card-title>
-    <mat-card-content>
-        content
-    </mat-card-content>
-    <mat-card-actions>
-        <button mat-flat-button color="primary">
-            login
-        </button>
-        <button mat-flat-button color="accent">
-            register
-        </button>
-        <button mat-flat-button color="my-primary">
-            login
-        </button>
-        <button mat-flat-button color="my-accent">
-            register
-        </button>
-    </mat-card-actions>
+
+<mat-toolbar color="primary">
+    <span>Smart Fridge</span>
+</mat-toolbar>
+<mat-card class="card">
+    <form #form="ngForm" class="example-form" >
+        <mat-form-field class="example-full-width">
+            <mat-label>E-mailadres</mat-label>
+            <input matInput placeholder="matthias.hernalsteen@euri.com">
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Wachtwoord</mat-label>
+            <input matInput placeholder="****">
+        </mat-form-field>
+    </form>
 </mat-card>
-  
