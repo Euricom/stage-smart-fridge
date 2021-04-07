@@ -9,11 +9,13 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
+
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
+#bould the api
 steps:
 - task: DotNetCoreCLI@2
   displayName: Build
@@ -22,6 +24,7 @@ steps:
     projects: '**/*.sln'
     workingDirectory: 'API_connected'
 
+#run the tests on the api
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
@@ -29,20 +32,21 @@ steps:
     testRunTitle: 'Test'
     workingDirectory: 'API_connected'
 
-
+#run the api
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
     publishWebProjects: true
     workingDirectory: 'API_connected'
 
+#use a secret to 
 - task: FileTransform@1
   inputs:
     folderPath: '$(System.DefaultWorkingDirectory)/**/*.zip'
     fileType: 'json'
     targetFiles: '**/appsettings.json'
 
-
+#deploy on azure to connect through internet
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
