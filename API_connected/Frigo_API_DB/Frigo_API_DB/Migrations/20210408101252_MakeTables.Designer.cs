@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Frigo_API_DB.Migrations
 {
     [DbContext(typeof(FridgeDbContext))]
-    [Migration("20210308101403_FirstSeeding")]
-    partial class FirstSeeding
+    [Migration("20210408101252_MakeTables")]
+    partial class MakeTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,7 +20,7 @@ namespace Frigo_API_DB.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Frigo_API_DB.Hoeveelheid", b =>
+            modelBuilder.Entity("Frigo_API_DB.Amounts", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -28,11 +28,11 @@ namespace Frigo_API_DB.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Aantal")
+                    b.Property<int>("Amount")
                         .HasColumnType("int")
                         .HasColumnName("Aantal");
 
-                    b.Property<string>("Naam")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Naam");
@@ -41,26 +41,30 @@ namespace Frigo_API_DB.Migrations
                         .IsClustered();
 
                     b.ToTable("Hoeveelheden");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Aantal = 0,
-                            Naam = "Cola-blik"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Aantal = 0,
-                            Naam = "Fanta"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Aantal = 0,
-                            Naam = "Sprite-Lemon-blik"
-                        });
+            modelBuilder.Entity("Frigo_API_DB.Person", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Password");
+
+                    b.HasKey("Id")
+                        .IsClustered();
+
+                    b.ToTable("Persons");
                 });
 #pragma warning restore 612, 618
         }

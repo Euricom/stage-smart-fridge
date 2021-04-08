@@ -29,7 +29,7 @@ namespace Frigo_API_DB.Data
             var person = modelBuilder.Entity<Person>();
             person.ToTable("Persons");
             person.HasKey("Id").IsClustered();
-            person.Property(nameof(Person.Id)).IsRequired().HasColumnName("Id");
+            person.Property(nameof(Person.Id)).ValueGeneratedOnAdd().IsRequired().HasColumnName("Id");
             person.Property(nameof(Person.Name)).IsRequired().HasColumnName("Name");
             person.Property(nameof(Person.PasswordHash)).IsRequired().HasColumnName("Password");
 

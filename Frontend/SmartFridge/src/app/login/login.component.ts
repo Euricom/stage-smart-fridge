@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
     let hash = Md5.hashStr("password");
     const md5 = new Md5();
     console.log(md5.appendStr(this.password).end());
-    this.backendService.login();
+    this.backendService.login(this.email, this.password);
     
  }
 
