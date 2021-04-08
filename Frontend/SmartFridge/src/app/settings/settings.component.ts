@@ -15,7 +15,7 @@ export class SettingsComponent implements OnInit {
   // Color2: String;
 
   // SendAmount: number;
-  // AllowSend: boolean;
+   //AllowSend: boolean;
 
   constructor() { }
 

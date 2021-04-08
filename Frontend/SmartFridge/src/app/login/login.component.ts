@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {NgForm} from '@angular/forms';
+import {Md5} from 'ts-md5/dist/md5';
+import {BackendService} from '../backend.service'
+
+
 
 @Component({
   selector: 'app-login',
@@ -8,11 +11,22 @@ import {NgForm} from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
 
-  //@ViewChild('form') form: NgForm;
-  constructor() { }
+  email: string = "";
+  password: string = "";
+  hide: boolean = true;
+  constructor(private backendService: BackendService) { }
   
 
   ngOnInit(): void {
   }
+
+  onSubmit() {
+    
+    let hash = Md5.hashStr("password");
+    const md5 = new Md5();
+    console.log(md5.appendStr(this.password).end());
+    this.backendService.login();
+    
+ }
 
 }

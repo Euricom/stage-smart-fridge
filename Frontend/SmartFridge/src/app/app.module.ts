@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -11,9 +10,11 @@ import { SettingsComponent } from './settings/settings.component';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatInputModule} from '@angular/material/input';
+import { MatCardModule} from '@angular/material/card';
+import { MatToolbarModule} from '@angular/material/toolbar';
+import { MatInputModule} from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
 
 
 const appRoutes: Routes = [
@@ -33,8 +34,8 @@ const appRoutes: Routes = [
     SettingsComponent
   ],
   imports: [
-    BrowserModule,
     FormsModule,
+    BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     AppRoutingModule,
@@ -42,7 +43,8 @@ const appRoutes: Routes = [
     MatButtonModule,
     MatCardModule,
     MatToolbarModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

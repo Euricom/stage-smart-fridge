@@ -10,7 +10,6 @@ namespace Frigo_API_DB
         public int Id { get; set; }
         public string Name { get; set; }
         public string PasswordHash { get; set; }
-        public bool Register { get; set; }
 
         public Person ()
         {

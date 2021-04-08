@@ -39,6 +39,12 @@ namespace Frigo_API_DB.Controllers
             //return test;
         }
 
+        [HttpGet("{pers}")]
+        public List<Person> GetPerson()
+        {
+            return frigoContext.Persons.ToList();
+        }
+
         // GET api/<FrigoController>/5
         [HttpGet("{id}")]
         public string Get(int id)

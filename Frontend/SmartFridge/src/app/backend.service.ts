@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {Beverage} from './Beverage';
-import {Settings} from './Settings';
+import {Person} from './Person';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,9 @@ import {Settings} from './Settings';
 export class BackendService {
 
   constructor(private http: HttpClient) { }
+  
+
+  private pers = new Person("","");
 
   getdrinken(): Observable<Beverage[]>
   {
@@ -26,31 +29,12 @@ export class BackendService {
   }
 
 
-
-  getSettings(): Observable<Settings[]>
+  login(email: string, password: string  )
   {
-    const headerDict = 
-    {
-    }
+    this.pers.email = email;
+    this.pers.password = password;
     
-    const requestOptions = {                                                                                                                                                                                 
-      headers: new HttpHeaders(headerDict), 
-    };
-
-
-    const url = "https://frigoapistudents.azurewebsites.net/frigo";
-    return this.http.get<Settings[]>(url, requestOptions);
-  }
-
-  setSettings()
-  {
-    const headerDict = {}
-    
-    const requestOptions = {                                                                                                                                                                                 
-      headers: new HttpHeaders(headerDict), 
-    };
-
-    const url = "https://frigoapistudents.azurewebsites.net/frigo";
-    this.http.get<Settings[]>(url, requestOptions);
+    const url = "https://frigoapieuricom.azurewebsites.net/Frigo/login";
+    this.http.post<Person>(url,this.pers);
   }
 }
