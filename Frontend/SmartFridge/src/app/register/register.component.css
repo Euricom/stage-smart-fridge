@@ -1,0 +1,12 @@
+.card
+{
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    margin-top: 10%;
+}
+
+.body
+{
+    background-color: #EDEDEF;
+}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Frigo_API_DB.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Frigo_API_DB
     public class Person
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Email { get; set; }
         public string PasswordHash { get; set; }
 
         public Person ()
@@ -17,28 +18,20 @@ namespace Frigo_API_DB
         }
         public Person(string name, string hash)
         {
-            Name = name;
+            Email = name;
             PasswordHash = hash;
         }
 
-        public bool rightPassword(List<Person> createdPersons)
+        public bool rightPassword(string pasHash)
         {
-            for(int i = 0; i < createdPersons.Count(); i++)
+            if(pasHash == this.PasswordHash)
             {
-                if(createdPersons[i].Name == Name)
-                {
-                    if(createdPersons[i].PasswordHash == PasswordHash)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
+                return true;
             }
             return false;
         }
+
+        
 
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {Md5} from 'ts-md5/dist/md5';
 import {BackendService} from '../backend.service'
 
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
     let hash = Md5.hashStr("password");
     const md5 = new Md5();
     console.log(md5.appendStr(this.password).end());
-    this.backendService.login(this.email, this.password);
+    this.backendService.registerNewPerson(this.email, this.password);
     
  }
 

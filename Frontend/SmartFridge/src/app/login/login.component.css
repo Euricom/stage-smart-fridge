@@ -1,15 +1,12 @@
-.c1{
-    /* background-color: #F8FFF8; */
-    background-color: red;
-    width: 100%;
-    margin: auto;
-    font-family: Roboto;
-}
-
 .card
 {
     width: 80%;
     height: 80%;
     margin: auto;
     margin-top: 10%;
+}
+
+.body
+{
+    background-color: #EDEDEF;
 }

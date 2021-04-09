@@ -8,7 +8,7 @@ import { Beverage } from '../Beverage';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  dr: Beverage[] = [];
+  beveragesInTheFridge: Beverage[] = [];
 
   constructor(private backend: BackendService) { }
 
@@ -19,15 +19,14 @@ export class HomeComponent implements OnInit {
 
   onGetdrank()
   {
-    console.log(this.dr[0]);
-    this.backend.getdrinken().subscribe(
+    console.log(this.beveragesInTheFridge[0]);
+    this.backend.getBeverages().subscribe(
       (response: Beverage[] ) =>
       {
         console.log(response);
-        this.dr = response;
+        this.beveragesInTheFridge = response;
       },
-      (error) => console.log(error),
-      () => console.log('klaar')
+      (error) => console.log(error)
     );
   }
 

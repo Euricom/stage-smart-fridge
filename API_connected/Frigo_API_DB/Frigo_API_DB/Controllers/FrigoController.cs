@@ -81,14 +81,22 @@ namespace Frigo_API_DB.Controllers
         [HttpPost("login")]
         public bool PostLogin(Person login)
         {
-            return login.rightPassword(frigoContext.Persons.ToList());
+            string pasHash = frigoContext.Persons.Where(p => p.Email == login.Email).Select(p => p.PasswordHash).SingleOrDefault();
+            
+            return login.rightPassword(pasHash);
         }
 
         [HttpPost("register")]
-        public void PostRegister(Person register)
+        public bool PostRegister(Person register)
         {
+            var personExistingCheck = frigoContext.Persons.Where(p => p.Email == register.Email).SingleOrDefault();
+            if(personExistingCheck != null)
+            {
+                return false;
+            }
             frigoContext.Persons.Add(register);
             frigoContext.SaveChanges();
+            return true;
         }
 
 

@@ -30,7 +30,7 @@ namespace Frigo_API_DB.Data
             person.ToTable("Persons");
             person.HasKey("Id").IsClustered();
             person.Property(nameof(Person.Id)).ValueGeneratedOnAdd().IsRequired().HasColumnName("Id");
-            person.Property(nameof(Person.Name)).IsRequired().HasColumnName("Name");
+            person.Property(nameof(Person.Email)).IsRequired().HasColumnName("Name");
             person.Property(nameof(Person.PasswordHash)).IsRequired().HasColumnName("Password");
 
 

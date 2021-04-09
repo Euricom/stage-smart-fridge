@@ -12,9 +12,9 @@ export class BackendService {
   constructor(private http: HttpClient) { }
   
 
-  private pers = new Person("","");
+  private personData = new Person("","");
 
-  getdrinken(): Observable<Beverage[]>
+  getBeverages(): Observable<Beverage[]>
   {
 
     const headerDict = 
@@ -29,12 +29,12 @@ export class BackendService {
   }
 
 
-  login(email: string, password: string  )
+  registerNewPerson(email: string, password: string  )
   {
-    this.pers.email = email;
-    this.pers.password = password;
+    this.personData.email = email;
+    this.personData.password = password;
     
     const url = "https://frigoapieuricom.azurewebsites.net/Frigo/login";
-    this.http.post<Person>(url,this.pers);
+    this.http.post<Person>(url,this.personData);
   }
 }
