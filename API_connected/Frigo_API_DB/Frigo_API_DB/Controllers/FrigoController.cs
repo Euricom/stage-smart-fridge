@@ -89,8 +89,14 @@ namespace Frigo_API_DB.Controllers
         [HttpPost("register")]
         public bool PostRegister(Person register)
         {
+            int alreadyMoreThanOne = frigoContext.Persons.Where(p => p.Email == register.Email).Count();
+            if (alreadyMoreThanOne > 1)
+            {
+                return false;
+            }
             var personExistingCheck = frigoContext.Persons.Where(p => p.Email == register.Email).SingleOrDefault();
-            if(personExistingCheck != null)
+            
+            if (personExistingCheck != null)
             {
                 return false;
             }

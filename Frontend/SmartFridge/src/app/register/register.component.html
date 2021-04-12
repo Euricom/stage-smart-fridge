@@ -1,36 +1,54 @@
-<body class="body">
+<body id="sect1">
     <mat-toolbar color="primary">
         <span>Smart Fridge</span>
     </mat-toolbar>
     <mat-card class="card">
-            <div>
+        <!-- TODO: allign this with the boxes, maby scale it up.-->
+        <div class="left">
+            <p class="title">Registreer</p>
+        </div>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="center">
                 <mat-form-field appearance="fill">
                     <mat-label>E-mailadres</mat-label>
-                    <input matInput name="email" [(ngModel)]="email">
+                    <input matInput name="email" formControlName="emailAdress">
                     <button mat-icon-button matSuffix >
                     </button>
+                    <mat-error *ngIf="form.get('emailAdress')?.valid">test</mat-error>
+                    <!-- <mat-error *ngIf="form.valid">{{getErrorMessage()}}</mat-error> -->
                 </mat-form-field>
             </div>
-            <div>
+
+            <div class="center">
                 <mat-form-field appearance="fill">
                     <mat-label>Wachtwoord</mat-label>
-                    <input matInput [type]="hide ? 'password' : 'text'" name="password" [(ngModel)]="password">
+                    <input matInput [type]="hide ? 'password' : 'text'" name="password" formControlName="password">
                     <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
-                    <mat-error *ngIf=passwordsNotMatching>De wachtwoorden zijn niet gelijk</mat-error>
+                    
                 </mat-form-field>
             </div>
-            <div>
+            <div class="center">
                 <mat-form-field appearance="fill">
                     <mat-label>Herhaal wachtwoord</mat-label>
-                    <input matInput [type]="hide ? 'password' : 'text'" name="passwordRepeat" [(ngModel)]="passwordRepeat">
+
+                    <input matInput [type]="hide ? 'password' : 'text'" name="passwordRepeat"  formControlName="passwordRepeat">
                     <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
+
+                    <!-- <mat-error *ngIf="passwordRepeat.invalid">{{getErrorMessagePassword()}}</mat-error> -->
+                    
                 </mat-form-field>
             </div>
-        <button mat-raised-button (click)="onSubmit()" color="primary">Registreer</button>
         
+            <div class="center">
+                <button  mat-raised-button  color="primary" [disabled]="!form.valid">Registreer</button>
+            </div>
+        </form>
+        <div class="center">
+            <p class="rederectLink">Al een account?</p>
+        </div>
     </mat-card>
 </body>

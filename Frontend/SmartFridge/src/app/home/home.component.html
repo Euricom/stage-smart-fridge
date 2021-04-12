@@ -4,7 +4,7 @@
         <th>Naam</th>
         <th>Aantal</th>
     </tr>
-    <tr *ngFor="let drink of dr"  [ngStyle]="{'background-color': drink.amount>5? 'green' : 'red'}">
+    <tr *ngFor="let drink of beveragesInTheFridge"  [ngStyle]="{'background-color': drink.amount>5? 'green' : 'red'}">
         <td>{{drink.id}}</td>
         <td>{{drink.name}}</td>
         <td>{{drink.amount}}</td>

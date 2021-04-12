@@ -1,27 +1,37 @@
-<body class="body">
+<body id="sect1">
     <mat-toolbar color="primary">
         <span>Smart Fridge</span>
     </mat-toolbar>
     <mat-card class="card">
-            <div>
-                <mat-form-field appearance="fill">
-                    <mat-label>E-mailadres</mat-label>
-                    <input matInput name="email" [(ngModel)]="email">
-                    <button mat-icon-button matSuffix >
-                        
-                    </button>
-                </mat-form-field>
-            </div>
-            <div>
-                <mat-form-field appearance="fill">
-                    <mat-label>Wachtwoord</mat-label>
-                    <input matInput [type]="hide ? 'password' : 'text'" name="password" [(ngModel)]="password">
-                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-            </div>
-        <button mat-raised-button (click)="onSubmit()" color="primary">Login</button>
+        <p class="title">Login</p>
+        <div class="center">
+            <mat-form-field appearance="fill">
+                <mat-label>E-mailadres</mat-label>
+                <input matInput name="email" [(ngModel)]="email">
+                <button mat-icon-button matSuffix >
+                    
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="center">
+            <mat-form-field appearance="fill">
+                <mat-label>Wachtwoord</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" name="password" [(ngModel)]="password">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="center">
+            <button mat-raised-button (click)="onSubmit()" color="primary">Login</button>
+        </div>
+        <div class="center">
+            <p class="rederectLink">Registreer</p>
+        </div>
+        <div class="center">
+            <p class="rederectLink">Wachtwoord vergeten</p>
+        </div>
+        
         
     </mat-card>
 </body>

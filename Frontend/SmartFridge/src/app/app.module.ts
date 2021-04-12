@@ -13,8 +13,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule} from '@angular/material/card';
 import { MatToolbarModule} from '@angular/material/toolbar';
 import { MatInputModule} from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule} from '@angular/material/icon';
+
 
 
 const appRoutes: Routes = [
@@ -44,7 +45,8 @@ const appRoutes: Routes = [
     MatCardModule,
     MatToolbarModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
