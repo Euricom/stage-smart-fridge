@@ -21,16 +21,18 @@ export class RegisterComponent implements OnInit {
     'passwordRepeat': new FormControl(null, [Validators.required])
   });
 
+  emailAdress1 = new FormControl('', [Validators.required, Validators.email]);
+
   ngOnInit()  {
     
   }
 
   getErrorMessage() {
-    // if (this.form.hasError('required')) {
-    //   return 'You must enter a value';
-    // }
+    if (this.emailAdress1.hasError('required')) {
+      return 'You must enter a value';
+    }
 
-    // return this.email.hasError('email') ? 'Not a valid email' : '';
+    return this.emailAdress1.hasError('email') ? 'Not a valid email' : '';
     return "test"
   }
 

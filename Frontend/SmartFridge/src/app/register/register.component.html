@@ -7,6 +7,16 @@
         <div class="left">
             <p class="title">Registreer</p>
         </div>
+        <div class="center">
+            <mat-form-field appearance="fill">
+                <mat-label>E-mailadres</mat-label>
+                <input matInput name="email" [formControl]="emailAdress1">
+                <button mat-icon-button matSuffix >
+                </button>
+                <mat-error *ngIf="emailAdress1.valid">{{getErrorMessage()}}</mat-error>
+                <!-- <mat-error *ngIf="form.valid">{{getErrorMessage()}}</mat-error> -->
+            </mat-form-field>
+        </div>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="center">
                 <mat-form-field appearance="fill">
