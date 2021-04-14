@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Md5} from 'ts-md5/dist/md5';
 import {BackendService} from '../backend.service';
-import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -20,10 +20,20 @@ export class RegisterComponent implements OnInit {
     'passwords': new FormGroup({
       'password': new FormControl(null, [Validators.required, this.samePasswords.bind(this)]),
       'passwordRepeat': new FormControl(null, [Validators.required , this.samePasswords.bind(this)])
-    })
+    }, { validators: this.test() })
   });
 
-
+  test(): ValidatorFn 
+  {
+    return (currentControl: AbstractControl): { [key: string]: any } |null => 
+    {
+      if(this.form?.get('password.password')?.value != this.form?.get('password.passwordRepeat')?.value)
+    {
+      return{ 'passwordsNotMatching': true};
+    }
+    return null;
+    }
+  }
   
 
   emailAdress1 = new FormControl('', [Validators.required, Validators.email]);

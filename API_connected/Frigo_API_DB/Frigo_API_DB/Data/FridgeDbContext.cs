@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Frigo_API_DB.Data
 {       //this is inherriting from dbContext class but does more now.
-    public class FridgeDbContext: IdentityDbContext
+    public class FridgeDbContext: IdentityDbContext<Person>
     {
         public FridgeDbContext(DbContextOptions<FridgeDbContext> options): base(options)
         {
@@ -27,12 +27,12 @@ namespace Frigo_API_DB.Data
             hoeveelheid.Property(nameof(Amounts.Amount)).IsRequired().HasColumnName("Aantal");
             hoeveelheid.Property(nameof(Amounts.Name)).IsRequired().HasColumnName("Naam");
 
-            var person = modelBuilder.Entity<Person>();
-            person.ToTable("Persons");
-            person.HasKey("Id").IsClustered();
-            person.Property(nameof(Person.Id)).ValueGeneratedOnAdd().IsRequired().HasColumnName("Id");
-            person.Property(nameof(Person.Email)).IsRequired().HasColumnName("Name");
-            person.Property(nameof(Person.Password)).IsRequired().HasColumnName("Password");
+            //var person = modelBuilder.Entity<Person>();
+            //person.ToTable("Persons");
+            //person.HasKey("Id").IsClustered();
+            //person.Property(nameof(Person.Id)).ValueGeneratedOnAdd().IsRequired().HasColumnName("Id");
+            //person.Property(nameof(Person.Email)).IsRequired().HasColumnName("Name");
+            //person.Property(nameof(Person.Password)).IsRequired().HasColumnName("Password");
 
 
 

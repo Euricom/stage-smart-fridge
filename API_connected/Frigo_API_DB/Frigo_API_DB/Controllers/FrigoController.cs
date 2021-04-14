@@ -1,11 +1,18 @@
 ﻿using Frigo_API_DB.Data;
+using Frigo_API_DB.DTO;
+using IdentityServer3.Core.Services;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,17 +26,19 @@ namespace Frigo_API_DB.Controllers
 
 
         private readonly UserManager<Person> _userManager;
-        private readonly RoleManager<IdentityRole<int>> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         public IConfiguration _configuration;
+        private readonly IJwtAuthManager _jwtAuthManager;
 
         private FridgeDbContext frigoContext;
 
-        public FrigoController(UserManager<Person> userManager,RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration, FridgeDbContext context)
+        public FrigoController(UserManager<Person> userManager,RoleManager<IdentityRole> roleManager, IConfiguration configuration, FridgeDbContext context, IJwtAuthManager jwtAuthManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             this.frigoContext = context;
+            _jwtAuthManager = jwtAuthManager;
         }
 
 
@@ -95,26 +104,81 @@ namespace Frigo_API_DB.Controllers
 
 
         [HttpPost("login")]
-        public bool PostLogin(Person login)
+        public async Task<IActionResult> PostLogin(PersonModel login)
         {
-            string pasHash = frigoContext.Persons.Where(p => p.Email == login.Email).Select(p => p.Password).SingleOrDefault();
-            
-            return login.rightPassword(pasHash);
+            var userExists = await _userManager.FindByEmailAsync(login.Email);
+            if (userExists == null)
+            {
+                return new BadRequestObjectResult(new { message = "EmailOrPasswordIsNotCorrect" });
+            }
+            if (await _userManager.CheckPasswordAsync(userExists, login.Password))
+            {
+                //var role = _userService.GetUserRole(userExists.UserName);
+                //var claims = new []
+                //{
+                //    new Claim(ClaimTypes.Email, userExists.Email),
+                //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                //};
+
+                //var jwtResult = _jwtAuthManager.GenerateTokens(userExists.UserName, claims, DateTime.Now);
+                //return Ok(new LoginResult
+                //{
+                //    UserName = userExists.UserName,
+                //    Role = role,
+                //    AccessToken = jwtResult.AccessToken,
+                //    RefreshToken = jwtResult.RefreshToken.TokenString
+                //});
+
+
+                var authClaims = new []
+                {
+                    new Claim(ClaimTypes.Email, userExists.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
+                    expires: DateTime.Now.AddHours(24),
+                    claims: authClaims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+                return Ok(new
+                {
+                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    expiration = token.ValidTo,
+                    id = userExists.Id
+                });
+                //return new OkObjectResult(new { message = "200 OK" });
+            }
+            return new BadRequestObjectResult(new { message = "EmailOrPasswordIsNotCorrect" });
         }
 
         [HttpPost("register")]
-        public async Task<bool> PostRegister(Person register)
+        public async Task<IActionResult> PostRegister(PersonModel register)
         {
+            var userExists = await _userManager.FindByEmailAsync(register.Email);
+            if (userExists != null)
+            {
+                return new BadRequestObjectResult(new { message = "EmailAlreadyExists" });
+            }
+           
+            var personToAdd = new Person()
+            {
+                Email = register.Email
+            };
+            personToAdd.makeUsernameFromEmail();
 
+            var result = await _userManager.CreateAsync(personToAdd, register.Password);
+            if(!result.Succeeded)
+            {
+                return new BadRequestObjectResult(new { message = "UserCouldnotBeMade" });
+            }
+           
 
-            var result = await _userManager.CreateAsync(register, register.Password);
-
-            //foreach (var error in result.Errors)
-            //{
-            //    ModelState.AddModelError("", error.Description);
-            //}
-
-            return result.Succeeded;
+            return new OkObjectResult(new { message = "200 OK"});
         }
 
 
