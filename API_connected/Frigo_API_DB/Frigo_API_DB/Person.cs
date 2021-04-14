@@ -1,4 +1,5 @@
 ﻿using Frigo_API_DB.Data;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace Frigo_API_DB
 {
-    public class Person
+    public class Person : IdentityUser<int>
     {
-        public int Id { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
+        
+        public string Password { get; set; }
 
         public Person ()
         {
@@ -19,12 +19,12 @@ namespace Frigo_API_DB
         public Person(string name, string hash)
         {
             Email = name;
-            PasswordHash = hash;
+            Password = hash;
         }
 
         public bool rightPassword(string pasHash)
         {
-            if(pasHash == this.PasswordHash)
+            if(pasHash == this.Password)
             {
                 return true;
             }

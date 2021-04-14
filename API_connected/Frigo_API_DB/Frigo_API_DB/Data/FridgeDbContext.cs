@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Frigo_API_DB.Data
-{
-    public class FridgeDbContext: DbContext
+{       //this is inherriting from dbContext class but does more now.
+    public class FridgeDbContext: IdentityDbContext
     {
         public FridgeDbContext(DbContextOptions<FridgeDbContext> options): base(options)
         {
@@ -31,7 +32,7 @@ namespace Frigo_API_DB.Data
             person.HasKey("Id").IsClustered();
             person.Property(nameof(Person.Id)).ValueGeneratedOnAdd().IsRequired().HasColumnName("Id");
             person.Property(nameof(Person.Email)).IsRequired().HasColumnName("Name");
-            person.Property(nameof(Person.PasswordHash)).IsRequired().HasColumnName("Password");
+            person.Property(nameof(Person.Password)).IsRequired().HasColumnName("Password");
 
 
 

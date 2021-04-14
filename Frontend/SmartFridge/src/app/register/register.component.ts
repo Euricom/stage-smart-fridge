@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Md5} from 'ts-md5/dist/md5';
 import {BackendService} from '../backend.service';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -11,15 +11,20 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 export class RegisterComponent implements OnInit {
 
   
- 
+  pasRep: string = 'test';
   hide: boolean = true;
  
   constructor(private backendService: BackendService) { }
   form: FormGroup = new FormGroup({
     'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
-    'password': new FormControl(null, [Validators.required]),
-    'passwordRepeat': new FormControl(null, [Validators.required])
+    'passwords': new FormGroup({
+      'password': new FormControl(null, [Validators.required, this.samePasswords.bind(this)]),
+      'passwordRepeat': new FormControl(null, [Validators.required , this.samePasswords.bind(this)])
+    })
   });
+
+
+  
 
   emailAdress1 = new FormControl('', [Validators.required, Validators.email]);
 
@@ -27,18 +32,45 @@ export class RegisterComponent implements OnInit {
     
   }
 
-  getErrorMessage() {
-    if (this.emailAdress1.hasError('required')) {
-      return 'You must enter a value';
+  getErrorMessageEmail() {
+    if (this.form.get('emailAdress')?.hasError('required')) {
+      return 'Je moet een e-mailadres geven';
     }
+    return "Geef een geldig e-mailadres"
+  }
 
-    return this.emailAdress1.hasError('email') ? 'Not a valid email' : '';
-    return "test"
+  getErrorMessagePasswordPasword() {
+    if (this.form.get('password')?.hasError('required')) {
+      console.log('Je moet een wachtwoord gevens');
+      return 'Je moet een wachtwoord geven';
+    }
+    console.log('Wachtwoorden komen niet overeen');
+    return "Wachtwoorden komen niet overeen"
+  }
+  getErrorMessagePasswordPaswordRepead() {
+    if (this.form.get('passwordRepeat')?.hasError('required')) {
+      console.log('Herhaal het wachtwoord aub');
+      return 'Herhaal het wachtwoord aub';
+    }
+    console.log('Wachtwoorden komen niet overeen');
+    return "Wachtwoorden komen niet overeen"
+  }
+
+
+
+  samePasswords(passwordToControl: FormControl): {[s: string]: boolean} | null
+  {
+    if(this.form?.get('passwords.password')?.value != this.form?.get('passwords.passwordRepeat')?.value)
+    {
+      return{ 'passwordsNotMatching': true};
+    }
+    return null;
   }
 
 
   onSubmit() {    
-    console.log(this.form.get('emailAdress')?.value);
+    console.log(this.form?.get('passwords.password')?.value);
+    console.log(this.form?.get('passwords.passwordRepeat')?.value)
 //     this.backendService.registerNewPerson(this.email.value, this.password.value);
 //     console.log("wachtwoord : ",  this.password.value);
 //     console.log("herhaal :", this.passwordRepeat.value);

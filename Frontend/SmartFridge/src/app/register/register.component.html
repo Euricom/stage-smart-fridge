@@ -7,16 +7,6 @@
         <div class="left">
             <p class="title">Registreer</p>
         </div>
-        <div class="center">
-            <mat-form-field appearance="fill">
-                <mat-label>E-mailadres</mat-label>
-                <input matInput name="email" [formControl]="emailAdress1">
-                <button mat-icon-button matSuffix >
-                </button>
-                <mat-error *ngIf="emailAdress1.valid">{{getErrorMessage()}}</mat-error>
-                <!-- <mat-error *ngIf="form.valid">{{getErrorMessage()}}</mat-error> -->
-            </mat-form-field>
-        </div>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="center">
                 <mat-form-field appearance="fill">
@@ -24,37 +14,35 @@
                     <input matInput name="email" formControlName="emailAdress">
                     <button mat-icon-button matSuffix >
                     </button>
-                    <mat-error *ngIf="form.get('emailAdress')?.valid">test</mat-error>
-                    <!-- <mat-error *ngIf="form.valid">{{getErrorMessage()}}</mat-error> -->
+                    <mat-error *ngIf="!form.get('emailAdress')?.valid">{{getErrorMessageEmail()}}</mat-error>
                 </mat-form-field>
             </div>
+            <div formGroupName="passwords">
+                <div class="center">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Wachtwoord</mat-label>
+                        <input matInput [type]="hide ? 'password' : 'text'" name="password" formControlName="password">
+                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
+                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="!form.get('passwords')?.valid">{{getErrorMessagePasswordPasword()}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="center">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Herhaal wachtwoord</mat-label>
 
-            <div class="center">
-                <mat-form-field appearance="fill">
-                    <mat-label>Wachtwoord</mat-label>
-                    <input matInput [type]="hide ? 'password' : 'text'" name="password" formControlName="password">
-                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                    
-                </mat-form-field>
+                        <input matInput [type]="hide ? 'password' : 'text'" name="passwordRepeat"  formControlName="passwordRepeat">
+                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
+                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="!form.get('passwords')?.valid">{{getErrorMessagePasswordPaswordRepead()}}</mat-error>
+                    </mat-form-field>
+                </div>
             </div>
             <div class="center">
-                <mat-form-field appearance="fill">
-                    <mat-label>Herhaal wachtwoord</mat-label>
-
-                    <input matInput [type]="hide ? 'password' : 'text'" name="passwordRepeat"  formControlName="passwordRepeat">
-                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-
-                    <!-- <mat-error *ngIf="passwordRepeat.invalid">{{getErrorMessagePassword()}}</mat-error> -->
-                    
-                </mat-form-field>
-            </div>
-        
-            <div class="center">
-                <button  mat-raised-button  color="primary" [disabled]="!form.valid">Registreer</button>
+                <!-- [disabled]="!form.valid" -->
+                <button  mat-raised-button  color="primary" >Registreer</button>
             </div>
         </form>
         <div class="center">

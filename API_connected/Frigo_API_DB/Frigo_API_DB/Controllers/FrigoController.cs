@@ -1,6 +1,8 @@
 ﻿using Frigo_API_DB.Data;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +16,25 @@ namespace Frigo_API_DB.Controllers
     [ApiController]
     public class FrigoController : ControllerBase
     {
+
+
+        private readonly UserManager<Person> _userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
+        public IConfiguration _configuration;
+
         private FridgeDbContext frigoContext;
-        public FrigoController(FridgeDbContext context)
+
+        public FrigoController(UserManager<Person> userManager,RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration, FridgeDbContext context)
         {
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _configuration = configuration;
             this.frigoContext = context;
         }
+
+
+
+        
         // GET: api/<FrigoController>
         [HttpGet]
         public List<Amounts> Get()
@@ -81,28 +97,24 @@ namespace Frigo_API_DB.Controllers
         [HttpPost("login")]
         public bool PostLogin(Person login)
         {
-            string pasHash = frigoContext.Persons.Where(p => p.Email == login.Email).Select(p => p.PasswordHash).SingleOrDefault();
+            string pasHash = frigoContext.Persons.Where(p => p.Email == login.Email).Select(p => p.Password).SingleOrDefault();
             
             return login.rightPassword(pasHash);
         }
 
         [HttpPost("register")]
-        public bool PostRegister(Person register)
+        public async Task<bool> PostRegister(Person register)
         {
-            int alreadyMoreThanOne = frigoContext.Persons.Where(p => p.Email == register.Email).Count();
-            if (alreadyMoreThanOne > 1)
-            {
-                return false;
-            }
-            var personExistingCheck = frigoContext.Persons.Where(p => p.Email == register.Email).SingleOrDefault();
-            
-            if (personExistingCheck != null)
-            {
-                return false;
-            }
-            frigoContext.Persons.Add(register);
-            frigoContext.SaveChanges();
-            return true;
+
+
+            var result = await _userManager.CreateAsync(register, register.Password);
+
+            //foreach (var error in result.Errors)
+            //{
+            //    ModelState.AddModelError("", error.Description);
+            //}
+
+            return result.Succeeded;
         }
 
 
