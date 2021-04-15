@@ -28,17 +28,17 @@ namespace Frigo_API_DB.Controllers
         private readonly UserManager<Person> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         public IConfiguration _configuration;
-        private readonly IJwtAuthManager _jwtAuthManager;
+        //private readonly IJwtAuthManager _jwtAuthManager;
 
         private FridgeDbContext frigoContext;
-
-        public FrigoController(UserManager<Person> userManager,RoleManager<IdentityRole> roleManager, IConfiguration configuration, FridgeDbContext context, IJwtAuthManager jwtAuthManager)
+        //, IJwtAuthManager jwtAuthManager
+        public FrigoController(UserManager<Person> userManager,RoleManager<IdentityRole> roleManager, IConfiguration configuration, FridgeDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             this.frigoContext = context;
-            _jwtAuthManager = jwtAuthManager;
+            //_jwtAuthManager = jwtAuthManager;
         }
 
 
@@ -113,45 +113,31 @@ namespace Frigo_API_DB.Controllers
             }
             if (await _userManager.CheckPasswordAsync(userExists, login.Password))
             {
-                //var role = _userService.GetUserRole(userExists.UserName);
-                //var claims = new []
-                //{
-                //    new Claim(ClaimTypes.Email, userExists.Email),
-                //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                //};
-
-                //var jwtResult = _jwtAuthManager.GenerateTokens(userExists.UserName, claims, DateTime.Now);
-                //return Ok(new LoginResult
-                //{
-                //    UserName = userExists.UserName,
-                //    Role = role,
-                //    AccessToken = jwtResult.AccessToken,
-                //    RefreshToken = jwtResult.RefreshToken.TokenString
-                //});
-
-
-                var authClaims = new []
+                //Make shure that you can find the name for who is the token.
+                var authClaims = new[]
                 {
                     new Claim(ClaimTypes.Email, userExists.Email),
+                    //What does this piece of code
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
+                //This helps to make the token with a secret key that only the server side knowa about
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwtToken:Secret"]));
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
+                
                 var token = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
+                    issuer: _configuration["jwtToken:ValidIssuer"],
+                    audience: _configuration["jwtToken:ValidAudience"],
                     expires: DateTime.Now.AddHours(24),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
+                //returned the token + how long it is valid + the userid
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo,
                     id = userExists.Id
                 });
-                //return new OkObjectResult(new { message = "200 OK" });
             }
             return new BadRequestObjectResult(new { message = "EmailOrPasswordIsNotCorrect" });
         }
