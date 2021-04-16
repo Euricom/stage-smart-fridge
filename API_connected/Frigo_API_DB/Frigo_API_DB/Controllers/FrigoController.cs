@@ -100,7 +100,7 @@ namespace Frigo_API_DB.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<IActionResult> PostLogin(PersonLoginModel login)
         {
             var userExists = await _userManager.FindByEmailAsync(login.Email);
