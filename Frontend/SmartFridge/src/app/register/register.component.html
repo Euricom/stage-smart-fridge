@@ -12,10 +12,27 @@
                 <mat-form-field appearance="fill">
                     <mat-label>E-mailadres</mat-label>
                     <input matInput name="email" formControlName="emailAdress">
-                    <button mat-icon-button matSuffix >
-                    </button>
+                    <button mat-icon-button matSuffix ></button>
                     <mat-error *ngIf="!form.get('emailAdress')?.valid">{{getErrorMessageEmail()}}</mat-error>
                 </mat-form-field>
+            </div>
+            <div formGroupName="name">
+                <div class="center">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Voornaam</mat-label>
+                        <input matInput name="FirstName"  formControlName="FirstName">
+                        <button mat-icon-button matSuffix ></button>
+                        <mat-error *ngIf="!form.get('passwords.passwordRepeat')?.valid">{{getErrorMessagePasswordPaswordRepead()}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="center">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Achternaam</mat-label>
+                        <input matInput name="LastMame"  formControlName="LastName">
+                        <button mat-icon-button matSuffix ></button>
+                        <mat-error *ngIf="!form.get('passwords.passwordRepeat')?.valid">{{getErrorMessagePasswordPaswordRepead()}}</mat-error>
+                    </mat-form-field>
+                </div>
             </div>
             <div formGroupName="passwords">
                 <div class="center">
@@ -40,15 +57,15 @@
                     </mat-form-field>
                     
                 </div>
-                <p>{{form.get('passwords')?.valid}}</p>
             </div>
+            
+
             <div class="center">
-                <!-- [disabled]="!form.valid" -->
-                <button  mat-raised-button  color="primary" >Registreer</button>
+                <button  mat-raised-button  color="primary" [disabled]="!form.valid">Registreer</button>
             </div>
         </form>
         <div class="center">
-            <p class="rederectLink">Al een account?</p>
+            <p class="rederectLink" routerLink="/login">Al een account?</p>
         </div>
     </mat-card>
 </body>

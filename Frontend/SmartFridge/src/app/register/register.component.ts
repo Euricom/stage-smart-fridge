@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Md5} from 'ts-md5/dist/md5';
 import {BackendService} from '../backend.service';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 
@@ -20,7 +19,11 @@ export class RegisterComponent implements OnInit {
     'passwords': new FormGroup({
       'password': new FormControl(null, [Validators.required, this.samePasswords.bind(this)]),
       'passwordRepeat': new FormControl(null, [Validators.required , this.samePasswords.bind(this)])
-    }, { validators: this.test() })
+    }, { validators: this.test() }),
+    'name': new FormGroup({
+      'FirstName' : new FormControl(null, Validators.required),
+      'LastName': new FormControl(null, Validators.required)
+    })
   });
 
   test(): ValidatorFn 
@@ -79,11 +82,7 @@ export class RegisterComponent implements OnInit {
 
 
   onSubmit() {    
-    console.log(this.form?.get('passwords.password')?.value);
-    console.log(this.form?.get('passwords.passwordRepeat')?.value)
-//     this.backendService.registerNewPerson(this.email.value, this.password.value);
-//     console.log("wachtwoord : ",  this.password.value);
-//     console.log("herhaal :", this.passwordRepeat.value);
+    console.log("test");
   }
 
 }

@@ -1,5 +1,7 @@
+﻿using DevExpress.Xpo;
 using Frigo_API_DB.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,20 +36,44 @@ namespace Frigo_API_DB
         {
             services.AddControllers();
 
-
-            
-
-
-            
             services.AddDbContext<Data.FridgeDbContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("connectie"),
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.EnableRetryOnFailure();
                     }
-                  
-                    ); });
-            services.AddIdentity<Person, IdentityRole>().AddEntityFrameworkStores<FridgeDbContext>();
+
+                    );
+            });
+            services.AddIdentity<Person, IdentityRole>(options => { options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "; }).AddEntityFrameworkStores<FridgeDbContext>();
+
+            
+
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+               
+            })
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["jwtToken:audience"],
+                    ValidIssuer = Configuration["jwtToken:issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwtToken:secret"]))
+                };
+            });
+
+            
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Frigo_API_DB", Version = "v1" });

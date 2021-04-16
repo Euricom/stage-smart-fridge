@@ -1,6 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import {Md5} from 'ts-md5/dist/md5';
-import {BackendService} from '../backend.service'
+import {BackendService} from '../backend.service';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 
 
 
@@ -15,18 +16,26 @@ export class LoginComponent implements OnInit {
   password: string = "";
   hide: boolean = true;
   constructor(private backendService: BackendService) { }
+
+  form: FormGroup = new FormGroup({
+    'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
+    'password': new FormControl(null, Validators.required)
+  });
   
 
   ngOnInit(): void {
   }
 
-  onSubmit() {
+  getErrorMessageEmail() {
+    if (this.form.get('emailAdress')?.hasError('required')) {
+      return 'Je moet een e-mailadres geven';
+    }
+    return "Geef een geldig e-mailadres"
+  }
+
+  onSubmit() {    
     
-    let hash = Md5.hashStr("password");
-    const md5 = new Md5();
-    console.log(md5.appendStr(this.password).end());
-    this.backendService.registerNewPerson(this.email, this.password);
-    
- }
+  }
+  
 
 }

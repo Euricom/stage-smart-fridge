@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Frigo_API_DB.DTO
 {
-    public class PersonModel
+    public class PersonLoginModel
     {
         [EmailAddress]
         [Required(ErrorMessage = "Email is verplicht")]

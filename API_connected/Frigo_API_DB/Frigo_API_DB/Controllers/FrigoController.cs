@@ -28,17 +28,14 @@ namespace Frigo_API_DB.Controllers
         private readonly UserManager<Person> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         public IConfiguration _configuration;
-        //private readonly IJwtAuthManager _jwtAuthManager;
 
         private FridgeDbContext frigoContext;
-        //, IJwtAuthManager jwtAuthManager
         public FrigoController(UserManager<Person> userManager,RoleManager<IdentityRole> roleManager, IConfiguration configuration, FridgeDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             this.frigoContext = context;
-            //_jwtAuthManager = jwtAuthManager;
         }
 
 
@@ -104,7 +101,7 @@ namespace Frigo_API_DB.Controllers
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> PostLogin(PersonModel login)
+        public async Task<IActionResult> PostLogin(PersonLoginModel login)
         {
             var userExists = await _userManager.FindByEmailAsync(login.Email);
             if (userExists == null)
@@ -116,17 +113,15 @@ namespace Frigo_API_DB.Controllers
                 //Make shure that you can find the name for who is the token.
                 var authClaims = new[]
                 {
-                    new Claim(ClaimTypes.Email, userExists.Email),
-                    //What does this piece of code
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(ClaimTypes.Email, userExists.Email)
                 };
                 //This helps to make the token with a secret key that only the server side knowa about
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwtToken:Secret"]));
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwtToken:secret"]));
 
                 
                 var token = new JwtSecurityToken(
-                    issuer: _configuration["jwtToken:ValidIssuer"],
-                    audience: _configuration["jwtToken:ValidAudience"],
+                    issuer: _configuration["jwtToken:issuer"],
+                    audience: _configuration["jwtToken:audience"],
                     expires: DateTime.Now.AddHours(24),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
@@ -143,8 +138,9 @@ namespace Frigo_API_DB.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> PostRegister(PersonModel register)
+        public async Task<IActionResult> PostRegister(PersonRegisterModel register)
         {
+            // The Username can't heave " " in it so change with an _??
             var userExists = await _userManager.FindByEmailAsync(register.Email);
             if (userExists != null)
             {
@@ -155,16 +151,14 @@ namespace Frigo_API_DB.Controllers
             {
                 Email = register.Email
             };
-            personToAdd.makeUsernameFromEmail();
+            personToAdd.makeUsername(register.FirstName, register.LastName);
 
             var result = await _userManager.CreateAsync(personToAdd, register.Password);
             if(!result.Succeeded)
             {
                 return new BadRequestObjectResult(new { message = "UserCouldnotBeMade" });
             }
-           
-
-            return new OkObjectResult(new { message = "200 OK"});
+            return Ok(result.Succeeded);
         }
 
 

@@ -2,7 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {Beverage} from './Beverage';
-import {Person} from './Person';
+import {PersonLogin} from './PersonLogin';
+import {PersonRegister} from './PersonRegister';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class BackendService {
   constructor(private http: HttpClient) { }
   
 
-  private personData = new Person("","");
+  private personLoginData = new PersonLogin("","");
+  private personRegisterData = new PersonRegister("","","","");
 
   getBeverages(): Observable<Beverage[]>
   {
@@ -29,12 +31,17 @@ export class BackendService {
   }
 
 
-  registerNewPerson(email: string, password: string  )
+  registerNewPerson(email: string, password: string, FirstName: string, LastName: string  )
   {
-    this.personData.email = email;
-    this.personData.password = password;
+    this.personRegisterData.email = email;
+    this.personRegisterData.password = password;
     
     const url = "https://frigoapieuricom.azurewebsites.net/Frigo/login";
-    this.http.post<Person>(url,this.personData);
+    this.http.post<PersonRegister>(url,this.personRegisterData);
+  }
+
+  login(email: string, password: string)
+  {
+
   }
 }
