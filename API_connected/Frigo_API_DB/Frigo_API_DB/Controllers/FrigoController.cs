@@ -150,7 +150,9 @@ namespace Frigo_API_DB.Controllers
            
             var personToAdd = new Person()
             {
-                Email = register.Email
+                Email = register.Email,
+                FirstName = register.FirstName,
+                LastName = register.LastName
             };
             personToAdd.makeUsername(register.FirstName, register.LastName);
 

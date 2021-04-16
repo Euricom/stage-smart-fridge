@@ -9,9 +9,11 @@ namespace Frigo_API_DB
 {
     public class Person : IdentityUser
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public void makeUsername(string FirstName, string LastName)
         {
-            this.UserName = FirstName + " " + LastName;
+            this.UserName = this.Email;
         }
 
         

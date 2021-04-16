@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {Beverage} from './Beverage';
 import {PersonLogin} from './PersonLogin';
 import {PersonRegister} from './PersonRegister';
+import { TokenValues } from './TokenValues';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class BackendService {
 
   constructor(private http: HttpClient) { }
   
-  private ret: string = "";
+  private tokenValues: string = "";
   private personLoginData = new PersonLogin("","");
   private personRegisterData = new PersonRegister("","","","");
 
@@ -44,19 +45,9 @@ export class BackendService {
   {
     this.personLoginData.Email = email;
     this.personLoginData.Password = password;
-    console.log(this.personLoginData);
 
     const url = "https://frigoapieuricom.azurewebsites.net/Frigo/login";
-    this.http.post<string>(url, this.personLoginData).subscribe(auth =>{
-      console.log(auth);
-      this.ret = auth;
-    });
-    return this.ret;
-    // const url2 = "https://frigoapieuricom.azurewebsites.net/Frigo";
-    // this.http.get<string>(url2).subscribe(auth =>{
-    //     console.log(auth);
-    //     this.ret = auth;
-    //   });
-    // return this.ret;
+    return this.http.post<TokenValues>(url, this.personLoginData)
+    //return this.tokenValues;
   }
 }

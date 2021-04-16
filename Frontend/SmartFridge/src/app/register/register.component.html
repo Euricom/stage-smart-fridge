@@ -12,7 +12,7 @@
                 <mat-form-field appearance="fill">
                     <mat-label>E-mailadres</mat-label>
                     <input matInput name="email" formControlName="emailAdress">
-                    <button mat-icon-button matSuffix ></button>
+                    <button mat-icon-button matSuffix type="button" ></button>
                     <mat-error *ngIf="!form.get('emailAdress')?.valid">{{getErrorMessageEmail()}}</mat-error>
                 </mat-form-field>
             </div>
@@ -21,7 +21,7 @@
                     <mat-form-field appearance="fill">
                         <mat-label>Voornaam</mat-label>
                         <input matInput name="FirstName"  formControlName="FirstName">
-                        <button mat-icon-button matSuffix ></button>
+                        <button mat-icon-button matSuffix type="button"></button>
                         <mat-error *ngIf="!form.get('passwords.passwordRepeat')?.valid">{{getErrorMessagePasswordPaswordRepead()}}</mat-error>
                     </mat-form-field>
                 </div>
@@ -29,7 +29,7 @@
                     <mat-form-field appearance="fill">
                         <mat-label>Achternaam</mat-label>
                         <input matInput name="LastMame"  formControlName="LastName">
-                        <button mat-icon-button matSuffix ></button>
+                        <button mat-icon-button matSuffix type="button"></button>
                         <mat-error *ngIf="!form.get('passwords.passwordRepeat')?.valid">{{getErrorMessagePasswordPaswordRepead()}}</mat-error>
                     </mat-form-field>
                 </div>
