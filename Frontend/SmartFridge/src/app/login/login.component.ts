@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   email: string = "";
   password: string = "";
+  token: string = "";
   hide: boolean = true;
   constructor(private backendService: BackendService) { }
 
@@ -33,8 +34,11 @@ export class LoginComponent implements OnInit {
     return "Geef een geldig e-mailadres"
   }
 
-  onSubmit() {    
-    
+  onSubmit() {  
+    this.email = this.form?.get('emailAdress')?.value;
+    this.password = this.form?.get('password')?.value;  
+    this.token = this.backendService.login(this.email, this.password);
+    console.log(this.token);
   }
   
 

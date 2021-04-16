@@ -12,7 +12,7 @@ export class BackendService {
 
   constructor(private http: HttpClient) { }
   
-
+  private ret: string = "";
   private personLoginData = new PersonLogin("","");
   private personRegisterData = new PersonRegister("","","","");
 
@@ -36,12 +36,27 @@ export class BackendService {
     this.personRegisterData.email = email;
     this.personRegisterData.password = password;
     
-    const url = "https://frigoapieuricom.azurewebsites.net/Frigo/login";
+    const url = "https://frigoapieuricom.azurewebsites.net/Frigo/register";
     this.http.post<PersonRegister>(url,this.personRegisterData);
   }
 
   login(email: string, password: string)
   {
+    this.personLoginData.Email = email;
+    this.personLoginData.Password = password;
+    console.log(this.personLoginData);
 
+    const url = "https://frigoapieuricom.azurewebsites.net/Frigo/login";
+    this.http.post<string>(url, this.personLoginData).subscribe(auth =>{
+      console.log(auth);
+      this.ret = auth;
+    });
+    return this.ret;
+    // const url2 = "https://frigoapieuricom.azurewebsites.net/Frigo";
+    // this.http.get<string>(url2).subscribe(auth =>{
+    //     console.log(auth);
+    //     this.ret = auth;
+    //   });
+    // return this.ret;
   }
 }
