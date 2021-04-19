@@ -11,9 +11,9 @@ namespace Frigo_API_DB
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public void makeUsername(string FirstName, string LastName)
+        public string makeUsername(string FirstName, string LastName)
         {
-            this.UserName = this.Email;
+            return FirstName + " " + LastName;
         }
 
         

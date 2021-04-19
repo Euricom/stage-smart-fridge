@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { BackendService } from '../backend.service';
 import { Beverage } from '../Beverage';
+import {Router} from '@angular/router'; 
 
 @Component({
   selector: 'app-home',
@@ -9,9 +11,9 @@ import { Beverage } from '../Beverage';
 })
 export class HomeComponent implements OnInit {
   beveragesInTheFridge: Beverage[] = [];
+  constructor(private backendService: BackendService, private route:Router) { }
 
-  constructor(private backend: BackendService) { }
-
+  
   ngOnInit(): void 
   {
     this.onGetdrank();
@@ -20,7 +22,7 @@ export class HomeComponent implements OnInit {
   onGetdrank()
   {
     console.log(this.beveragesInTheFridge[0]);
-    this.backend.getBeverages().subscribe(
+    this.backendService.getBeverages().subscribe(
       (response: Beverage[] ) =>
       {
         console.log(response);
@@ -28,6 +30,12 @@ export class HomeComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+  }
+
+  loguit()
+  {
+    this.backendService.logout();
+    this.route.navigate(['/login']);
   }
 
 }

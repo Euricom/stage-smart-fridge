@@ -5,6 +5,7 @@ import {Beverage} from './Beverage';
 import {PersonLogin} from './PersonLogin';
 import {PersonRegister} from './PersonRegister';
 import { TokenValues } from './TokenValues';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -50,4 +51,26 @@ export class BackendService {
     return this.http.post<TokenValues>(url, this.personLoginData)
     //return this.tokenValues;
   }
+
+  saveToken(tok: TokenValues)
+  {
+    localStorage.setItem('token', tok.token)
+    localStorage.setItem('expires_at', tok.expiration.toString());
+  }
+
+  isLogedIn()
+  {
+    return moment().isBefore(this.getExpiration());
+  }
+
+  getExpiration() {
+    const expiration = localStorage.getItem("expires_at");
+    return moment(expiration);
+  }   
+
+
+  logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("expires_at");
+}
 }

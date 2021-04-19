@@ -1,13 +1,10 @@
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Naam</th>
-        <th>Aantal</th>
-    </tr>
-    <tr *ngFor="let drink of beveragesInTheFridge"  [ngStyle]="{'background-color': drink.amount>5? 'green' : 'red'}">
-        <td>{{drink.id}}</td>
-        <td>{{drink.name}}</td>
-        <td>{{drink.amount}}</td>
-    </tr>
-</table>
-<button style="background-color:primary;">test</button>
+<body id="sect1">
+    <mat-toolbar color="primary">
+        <span>Smart Fridge</span>
+        <button mat-button [matMenuTriggerFor]="beforeMenu">Matthias Hernalsteen</button>
+        <mat-menu #beforeMenu="matMenu" xPosition="before">
+            <button (click)="loguit()">Loguit</button>
+        </mat-menu>
+        
+    </mat-toolbar>
+</body>

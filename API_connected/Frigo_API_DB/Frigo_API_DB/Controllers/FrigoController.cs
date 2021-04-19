@@ -14,6 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -141,20 +142,30 @@ namespace Frigo_API_DB.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> PostRegister(PersonRegisterModel register)
         {
-            // The Username can't heave " " in it so change with an _??
             var userExists = await _userManager.FindByEmailAsync(register.Email);
             if (userExists != null)
             {
                 return new BadRequestObjectResult(new { message = "EmailAlreadyExists" });
             }
+            string pattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
+            if (!Regex.IsMatch(register.Password, pattern))
+            {
+                return new BadRequestObjectResult(new { message = "WrongPasswordStructure" });
+            }
            
+
             var personToAdd = new Person()
             {
-                Email = register.Email,
-                FirstName = register.FirstName,
-                LastName = register.LastName
+                Email = register.Email
             };
-            personToAdd.makeUsername(register.FirstName, register.LastName);
+            
+            string username = personToAdd.makeUsername(register.FirstName, register.LastName);
+            var userNameExists = await _userManager.FindByNameAsync(username);
+            if(userNameExists != null)
+            {
+                return new BadRequestObjectResult(new { message = "UserNameAlreadyExists" });
+            }
+            personToAdd.UserName = username;
 
             var result = await _userManager.CreateAsync(personToAdd, register.Password);
             if(!result.Succeeded)

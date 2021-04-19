@@ -22,7 +22,7 @@
                         <mat-label>Voornaam</mat-label>
                         <input matInput name="FirstName"  formControlName="FirstName">
                         <button mat-icon-button matSuffix type="button"></button>
-                        <mat-error *ngIf="!form.get('passwords.passwordRepeat')?.valid">{{getErrorMessagePasswordPaswordRepead()}}</mat-error>
+                        <mat-error *ngIf="!form.get('name.FirstName')?.valid">{{getErrorMessageFirstName()}}</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="center">
@@ -30,7 +30,7 @@
                         <mat-label>Achternaam</mat-label>
                         <input matInput name="LastMame"  formControlName="LastName">
                         <button mat-icon-button matSuffix type="button"></button>
-                        <mat-error *ngIf="!form.get('passwords.passwordRepeat')?.valid">{{getErrorMessagePasswordPaswordRepead()}}</mat-error>
+                        <mat-error *ngIf="!form.get('name.LastName')?.valid">{{getErrorMessageLastName()}}</mat-error>
                     </mat-form-field>
                 </div>
             </div>

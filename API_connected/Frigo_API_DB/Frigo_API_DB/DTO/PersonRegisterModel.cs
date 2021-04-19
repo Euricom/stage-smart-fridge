@@ -9,16 +9,16 @@ namespace Frigo_API_DB.DTO
     public class PersonRegisterModel
     {
         [EmailAddress]
-        [Required(ErrorMessage = "Email is verplicht")]
+        [Required(ErrorMessage = "Email is obligted")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Wachtwoord is verplicht")]
+        [Required(ErrorMessage = "Password is obligted")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Voornaam is verplicht")]
+        [Required(ErrorMessage = "Firstname is obligted")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Achternaam is verplicht")]
+        [Required(ErrorMessage = "Lastname is Obligated")]
         public string LastName { get; set; }
     }
 }

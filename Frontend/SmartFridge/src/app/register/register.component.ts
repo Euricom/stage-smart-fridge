@@ -17,12 +17,12 @@ export class RegisterComponent implements OnInit {
   form: FormGroup = new FormGroup({
     'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
     'passwords': new FormGroup({
-      'password': new FormControl(null, [Validators.required, this.samePasswords.bind(this)]),
-      'passwordRepeat': new FormControl(null, [Validators.required , this.samePasswords.bind(this)])
+      'password': new FormControl(null, [Validators.required, this.samePasswords.bind(this), Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)]),
+      'passwordRepeat': new FormControl(null, [Validators.required , this.samePasswords.bind(this), Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)])
     }, { validators: this.test() }),
     'name': new FormGroup({
-      'FirstName' : new FormControl(null, Validators.required),
-      'LastName': new FormControl(null, Validators.required)
+      'FirstName' : new FormControl(null, [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
+      'LastName': new FormControl(null, [Validators.required, Validators.pattern(/^[A-Za-z]+$/)])
     })
   });
 
@@ -39,8 +39,6 @@ export class RegisterComponent implements OnInit {
   }
   
 
-  emailAdress1 = new FormControl('', [Validators.required, Validators.email]);
-
   ngOnInit()  {
     
   }
@@ -51,24 +49,43 @@ export class RegisterComponent implements OnInit {
     }
     return "Geef een geldig e-mailadres"
   }
-
+  // TODO The error message isn't on point yet, functionality works fine though
+  // Try to catch this in 1 blok.
   getErrorMessagePasswordPasword() {
-    if (this.form.get('password')?.hasError('required')) {
-      console.log('Je moet een wachtwoord gevens');
+    if (this.form.get('passwords.password')?.hasError('required')) {
       return 'Je moet een wachtwoord geven';
     }
-    console.log('Wachtwoorden komen niet overeen');
+    if (this.form.get('passwords.password')?.hasError('pattern')) {
+      return 'Hoofdletter, nummer en spaciaal karakter is verplicht min 8 karakters';
+    }
     return "Wachtwoorden komen niet overeen"
   }
   getErrorMessagePasswordPaswordRepead() {
-    if (this.form.get('passwordRepeat')?.hasError('required')) {
-      console.log('Herhaal het wachtwoord aub');
+    if (this.form.get('passwords.passwordRepeat')?.hasError('required')) {
       return 'Herhaal het wachtwoord aub';
     }
-    console.log('Wachtwoorden komen niet overeen');
+    if (this.form.get('passwords.passwordRepeat')?.hasError('pattern')) {
+      return 'Hoofdletter, nummer en spaciaal karakter is verplicht min 8 karakters';
+    }
     return "Wachtwoorden komen niet overeen"
   }
+  getErrorMessageFirstName()
+  {
+    if (this.form.get('name.FirstName')?.hasError('required')) {
+      return 'Geef een voornaam aub';
+    }
+    return "Dit is geen geldige voornaam"
+  }
 
+  getErrorMessageLastName()
+  {
+    if (this.form.get('name.LastName')?.hasError('required')) {
+      return 'Geef een achternaam aub';
+    }
+    return "Dit is geen geldige achternaam"
+  }
+
+  
 
 
   samePasswords(passwordToControl: FormControl): {[s: string]: boolean} | null
@@ -80,9 +97,10 @@ export class RegisterComponent implements OnInit {
     return null;
   }
 
+  
 
-  onSubmit() {    
-    console.log("test");
+  onSubmit() {
+    console.log(this.form.get('passwords.passwordRepeat')?.getError)
   }
 
 }

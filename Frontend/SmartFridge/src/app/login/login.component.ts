@@ -1,8 +1,8 @@
 import { Component, OnInit} from '@angular/core';
-import {Md5} from 'ts-md5/dist/md5';
 import {BackendService} from '../backend.service';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
-import { TokenValues } from '../TokenValues';
+import {Router} from '@angular/router'; 
+
 
 
 
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   token: string = "";
   hide: boolean = true;
   wrongPasswordForEmail: boolean = false;
-  constructor(private backendService: BackendService) { }
+  constructor(private backendService: BackendService, private route:Router) { }
 
   form: FormGroup = new FormGroup({
     'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
@@ -44,14 +44,15 @@ export class LoginComponent implements OnInit {
       data =>
       {
         this.wrongPasswordForEmail = false;
-        this.saveToken(data);
-        //console.log(data);
+        this.backendService.saveToken(data);
+        this.route.navigate(['/home']);
       },
       recievedError =>
       {
         this.CheckError(recievedError.error.message);
       }
     );
+
   }
 
   CheckError(errorMessage: string)
@@ -63,11 +64,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  saveToken(tok: TokenValues)
-  {
-    console.log(tok.expiration);
-    //console.log(tok);
-  }
+  
   
 
 }
