@@ -34,6 +34,20 @@ namespace Frigo_API_DB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+                options.AddDefaultPolicy(
+                             builder =>
+                             {
+                                 builder.AllowAnyOrigin();
+                                 builder.AllowAnyMethod();
+                                 builder.AllowAnyHeader();
+                             });
+            });
+
+
             services.AddControllers();
 
             services.AddDbContext<Data.FridgeDbContext>(options => {
@@ -106,7 +120,7 @@ namespace Frigo_API_DB
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Frigo_API_DB v1"));
             }
-
+            app.UseCors();
             app.UseHttpsRedirection();
 
             app.UseRouting();

@@ -16,6 +16,9 @@ export class RegisterComponent implements OnInit {
   firstName: string = "";
   lastName: string = "";
   hide: boolean = true;
+  registerErrorMessage: string = "";
+  errorToShow: string = "";
+  servererror: boolean = false;
  
   constructor(private backendService: BackendService, private route:Router) { }
 
@@ -45,7 +48,7 @@ export class RegisterComponent implements OnInit {
   
 
   ngOnInit()  {
-    
+    this.servererror = false;
   }
 
   getErrorMessageEmail() {
@@ -113,24 +116,41 @@ export class RegisterComponent implements OnInit {
     this.backendService.registerNewPerson(this.email, this.password, this.firstName, this.lastName).subscribe(
       data =>
       {
-        console.log(data);
         this.route.navigate(['/login']);
       },
       recievedError =>
       {
-        console.log(recievedError);
-        this.CheckError(recievedError.error.message);
+        this.registerErrorMessage = recievedError.error.message
+        this.CheckError();
       }
     );
   }
 
-  CheckError(errorMessage: string)
+  CheckError()
   {
-    console.log(errorMessage);
-    if(errorMessage == "EmailOrPasswordIsNotCorrect")
-    {
-      //this.wrongPasswordForEmail = true;
-    }
+    switch(this.registerErrorMessage) { 
+      case "EmailAlreadyExists": { 
+         this.errorToShow = "E-mail adres bestaat al";
+         this.servererror = true;
+         break; 
+      } 
+      case "WrongPasswordStructure": { 
+        //Normaly this error 'll never show itself.
+        this.errorToShow = "Hoofdletter, nummer en spaciaal karakter is verplicht min 8 karakters bij het wachtwoord";
+        this.servererror = true; 
+         break; 
+      } 
+      case "UserNameAlreadyExists": { 
+        this.errorToShow = "Gebruikersnaam ( voornaam + achternaam) bestaat al";
+         this.servererror = true; 
+        break; 
+     } 
+      default: { 
+        this.errorToShow = "Gbruiker kon niet worden aangemaakt";
+        this.servererror = true;
+         break; 
+      } 
+   }
   }
 
 }

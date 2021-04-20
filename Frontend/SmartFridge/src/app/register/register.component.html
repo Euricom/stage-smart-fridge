@@ -58,7 +58,9 @@
                     
                 </div>
             </div>
-            
+            <div *ngIf="servererror" class="center">
+                <p color="red">{{errorToShow}}</p>
+            </div>
 
             <div class="center">
                 <button  mat-raised-button  color="primary" [disabled]="!form.valid">Registreer</button>
