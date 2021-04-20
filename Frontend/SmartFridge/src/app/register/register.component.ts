@@ -108,17 +108,17 @@ export class RegisterComponent implements OnInit {
     this.email = this.form?.get('emailAdress')?.value;
     this.password = this.form?.get('passwords.password')?.value;
     this.firstName = this.form?.get('name.FirstName')?.value;
-    this.lastName = this.form?.get('name.lastname')?.value;
+    this.lastName = this.form?.get('name.LastName')?.value;
 
     this.backendService.registerNewPerson(this.email, this.password, this.firstName, this.lastName).subscribe(
       data =>
       {
         console.log(data);
-
         this.route.navigate(['/login']);
       },
       recievedError =>
       {
+        console.log(recievedError);
         this.CheckError(recievedError.error.message);
       }
     );
@@ -129,7 +129,7 @@ export class RegisterComponent implements OnInit {
     console.log(errorMessage);
     if(errorMessage == "EmailOrPasswordIsNotCorrect")
     {
-      this.wrongPasswordForEmail = true;
+      //this.wrongPasswordForEmail = true;
     }
   }
 

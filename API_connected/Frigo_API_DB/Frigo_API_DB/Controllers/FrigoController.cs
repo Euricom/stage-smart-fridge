@@ -172,7 +172,7 @@ namespace Frigo_API_DB.Controllers
             {
                 return new BadRequestObjectResult(new { message = "UserCouldnotBeMade" });
             }
-            return Ok("good");
+            return Ok("{good}");
         }
 
 
