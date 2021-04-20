@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {BackendService} from '../backend.service';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import {Router} from '@angular/router'; 
 
 @Component({
   selector: 'app-register',
@@ -10,10 +11,14 @@ import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, 
 export class RegisterComponent implements OnInit {
 
   
-  pasRep: string = 'test';
+  email: string = "";
+  password: string = "";
+  firstName: string = "";
+  lastName: string = "";
   hide: boolean = true;
  
-  constructor(private backendService: BackendService) { }
+  constructor(private backendService: BackendService, private route:Router) { }
+
   form: FormGroup = new FormGroup({
     'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
     'passwords': new FormGroup({
@@ -100,7 +105,32 @@ export class RegisterComponent implements OnInit {
   
 
   onSubmit() {
-    console.log(this.form.get('passwords.passwordRepeat')?.getError)
+    this.email = this.form?.get('emailAdress')?.value;
+    this.password = this.form?.get('passwords.password')?.value;
+    this.firstName = this.form?.get('name.FirstName')?.value;
+    this.lastName = this.form?.get('name.lastname')?.value;
+
+    this.backendService.registerNewPerson(this.email, this.password, this.firstName, this.lastName).subscribe(
+      data =>
+      {
+        console.log(data);
+
+        this.route.navigate(['/login']);
+      },
+      recievedError =>
+      {
+        this.CheckError(recievedError.error.message);
+      }
+    );
+  }
+
+  CheckError(errorMessage: string)
+  {
+    console.log(errorMessage);
+    if(errorMessage == "EmailOrPasswordIsNotCorrect")
+    {
+      this.wrongPasswordForEmail = true;
+    }
   }
 
 }

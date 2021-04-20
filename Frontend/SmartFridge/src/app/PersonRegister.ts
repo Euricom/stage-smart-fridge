@@ -2,8 +2,8 @@ export class PersonRegister
 {
     constructor
     (
-        public email: string,
-        public password: string,
+        public Email: string,
+        public Password: string,
         public FirstName : string,
         public LastName : string
      ) 

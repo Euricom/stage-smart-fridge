@@ -33,13 +33,15 @@ export class BackendService {
   }
 
 
-  registerNewPerson(email: string, password: string, FirstName: string, LastName: string  )
+  registerNewPerson(email: string, password: string, firstName: string, lastName: string  )
   {
-    this.personRegisterData.email = email;
-    this.personRegisterData.password = password;
+    this.personRegisterData.Email = email;
+    this.personRegisterData.Password = password;
+    this.personRegisterData.FirstName = firstName;
+    this.personRegisterData.LastName = lastName;
     
     const url = "https://frigoapieuricom.azurewebsites.net/Frigo/register";
-    this.http.post<PersonRegister>(url,this.personRegisterData);
+    return this.http.post<string>(url,this.personRegisterData);
   }
 
   login(email: string, password: string)
@@ -49,8 +51,9 @@ export class BackendService {
 
     const url = "https://frigoapieuricom.azurewebsites.net/Frigo/login";
     return this.http.post<TokenValues>(url, this.personLoginData)
-    //return this.tokenValues;
   }
+
+  
 
   saveToken(tok: TokenValues)
   {
