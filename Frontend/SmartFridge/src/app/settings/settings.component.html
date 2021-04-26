@@ -1,1 +1,48 @@
-<p>settings works!</p>
+<body>
+    <mat-toolbar color="primary">
+        <span class="example-spacer">Smart Fridge</span>
+        <button mat-button [matMenuTriggerFor]="navMenu">
+            <mat-icon>lightbulb</mat-icon>{{name}}
+        </button>
+            <mat-menu #navMenu="matMenu" xPosition="before" color="primary">
+                <div color="primary">
+                <p mat-menu-item (click)="logout()" class="plMenuCSS">Loguit</p>
+                <p mat-menu-item  routerLink="/home">Tabel</p>
+                <p mat-menu-item  routerLink="/settings">Instellingen</p>
+                </div>
+            </mat-menu>     
+    </mat-toolbar>
+
+    <mat-card class="card">
+        <p class="title">Instellingen</p>
+        <p>Verander hier u minimum waarde. Als er minder drankjes dan dit minimum in de frigo staan, krijgt u een melding.</p>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            
+            <div class="center">
+                <mat-form-field appearance="fill">
+                    <mat-label>Minimum</mat-label>
+                    <input matInput name="Minimum" formControlName="Minimum">
+                    <button mat-icon-button matSuffix type="button" >
+                    </button>
+                    <mat-error *ngIf="!form.get('Minimum')?.valid">{{getErrorMessageMinimum()}}</mat-error>
+                </mat-form-field>
+            </div>
+            <p>U krijgt een melding op onderstaand e-mail adres, u kan he hier ook aanpassen.</p>
+            <div class="center">
+                <mat-form-field appearance="fill">
+                    <mat-label>E-mailadres</mat-label>
+                    <input matInput name="Email" formControlName="Email">
+                    <button mat-icon-button matSuffix type="button" >
+                    </button>
+                    <mat-error *ngIf="!form.get('Email')?.valid">{{getErrorMessageEmail()}}</mat-error>
+                </mat-form-field>
+            </div>
+            <mat-checkbox class="example-margin" formControlName="Checkbox">Ik wil een email ontvangen</mat-checkbox>
+            <div class="center">
+                <button mat-raised-button color="primary" [disabled]="!form.valid" type="submit">Opslaan</button>
+            </div>
+        </form>
+    </mat-card>
+</body>
+
+

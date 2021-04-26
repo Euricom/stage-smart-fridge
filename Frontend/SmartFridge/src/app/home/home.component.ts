@@ -1,41 +1,57 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { BackendService } from '../backend.service';
-import { Beverage } from '../Beverage';
+import { Beverage } from '../classes/Beverage';
 import {Router} from '@angular/router'; 
+import { TableService } from '../Services/table.service'
+import { AuthenticationService } from '../Services/authentication.service'
+import { UserService } from '../Services/user.service';
+
+
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
-  beveragesInTheFridge: Beverage[] = [];
-  constructor(private backendService: BackendService, private route:Router) { }
 
   
+
+
+export class HomeComponent implements OnInit {
+
+  
+  constructor(private AuthenticationService: AuthenticationService, private TableService: TableService, private route:Router, private UserService: UserService) { }
+
+  displayedColumns: string[] = ['name', 'amount', 'symbol'];
+  
+
+  minAmount: number = 10;
+  beveragesInTheFridge: Beverage[] = [];
+  name: string="";
+  panelOpenState = false;
+
   ngOnInit(): void 
   {
-    this.onGetdrank();
+    this.minAmount = this.UserService.getMinAmount();
+    this.onGetDrinksFromDatabase();
+    this.name = this.AuthenticationService.getUsername();
   }
 
-  onGetdrank()
+  onGetDrinksFromDatabase()
   {
-    console.log(this.beveragesInTheFridge[0]);
-    this.backendService.getBeverages().subscribe(
+    this.TableService.getBeverages().subscribe(
       (response: Beverage[] ) =>
       {
-        console.log(response);
         this.beveragesInTheFridge = response;
       },
       (error) => console.log(error)
     );
   }
 
-  loguit()
+  logout()
   {
-    this.backendService.logout();
+    this.AuthenticationService.logout();
     this.route.navigate(['/login']);
   }
-
 }

@@ -4,14 +4,16 @@ using Frigo_API_DB.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Frigo_API_DB.Migrations
 {
     [DbContext(typeof(FridgeDbContext))]
-    partial class FridgeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210421091318_fillamountstable")]
+    partial class fillamountstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,29 +133,6 @@ namespace Frigo_API_DB.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("Frigo_API_DB.Settings", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("UserId");
-
-                    b.Property<string>("EmailToSendTo")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("EmailForNotifications");
-
-                    b.Property<int>("SendAmount")
-                        .HasColumnType("int")
-                        .HasColumnName("MinumumAmount");
-
-                    b.Property<bool>("WantToRecieveNotification")
-                        .HasColumnType("bit")
-                        .HasColumnName("RecieveNotification");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("SettingsTable");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {BackendService} from '../backend.service';
+import { AuthenticationService } from '../Services/authentication.service'
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {Router} from '@angular/router'; 
+import { ConfirmedValidator } from '../classes/passMatch';
 
 @Component({
   selector: 'app-register',
@@ -20,19 +21,20 @@ export class RegisterComponent implements OnInit {
   errorToShow: string = "";
   servererror: boolean = false;
  
-  constructor(private backendService: BackendService, private route:Router) { }
+  constructor(private AuthenticationService:  AuthenticationService, private route:Router) { }
 
   form: FormGroup = new FormGroup({
     'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
     'passwords': new FormGroup({
-      'password': new FormControl(null, [Validators.required, this.samePasswords.bind(this), Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)]),
-      'passwordRepeat': new FormControl(null, [Validators.required , this.samePasswords.bind(this), Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)])
-    }, { validators: this.test() }),
+      'password': new FormControl(null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)]),
+      'passwordRepeat': new FormControl(null, [ Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/),this.test()])
+    }),  
     'name': new FormGroup({
       'FirstName' : new FormControl(null, [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
       'LastName': new FormControl(null, [Validators.required, Validators.pattern(/^[A-Za-z]+$/)])
     })
   });
+
 
   test(): ValidatorFn 
   {
@@ -75,6 +77,10 @@ export class RegisterComponent implements OnInit {
     if (this.form.get('passwords.passwordRepeat')?.hasError('pattern')) {
       return 'Hoofdletter, nummer en spaciaal karakter is verplicht min 8 karakters';
     }
+    if(this.form.get('passwords.passwordRepeat')?.hasError('notEaual'))
+    {
+      console.log("test");
+    }
     return "Wachtwoorden komen niet overeen"
   }
   getErrorMessageFirstName()
@@ -113,7 +119,7 @@ export class RegisterComponent implements OnInit {
     this.firstName = this.form?.get('name.FirstName')?.value;
     this.lastName = this.form?.get('name.LastName')?.value;
 
-    this.backendService.registerNewPerson(this.email, this.password, this.firstName, this.lastName).subscribe(
+    this.AuthenticationService.registerNewPerson(this.email, this.password, this.firstName, this.lastName).subscribe(
       data =>
       {
         this.route.navigate(['/login']);

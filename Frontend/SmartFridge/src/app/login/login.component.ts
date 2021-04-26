@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import {BackendService} from '../backend.service';
+import { AuthenticationService } from '../Services/authentication.service'
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {Router} from '@angular/router'; 
 
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   token: string = "";
   hide: boolean = true;
   wrongPasswordForEmail: boolean = false;
-  constructor(private backendService: BackendService, private route:Router) { }
+  constructor(private AuthenticationService: AuthenticationService, private route:Router) { }
 
   form: FormGroup = new FormGroup({
     'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
@@ -40,11 +40,12 @@ export class LoginComponent implements OnInit {
     this.email = this.form?.get('emailAdress')?.value;
     this.password = this.form?.get('password')?.value;  
 
-    this.backendService.login(this.email, this.password).subscribe(
+    this.AuthenticationService.login(this.email, this.password).subscribe(
       data =>
       {
         this.wrongPasswordForEmail = false;
-        this.backendService.saveToken(data);
+        console.log(data.emailToSendTo);
+        this.AuthenticationService.saveTokenAndUsername(data);
         this.route.navigate(['/home']);
       },
       recievedError =>

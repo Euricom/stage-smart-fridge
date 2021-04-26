@@ -80,12 +80,8 @@ namespace Frigo_API_DB.Controllers
         public string Post(List<RasPiInput> dr)
         {
             // data opsturen naar de berekeningen, uitrekenen en dan met de list data opslaan.
-
             Calculating rekenen = new Calculating();
             List<Amounts> aantallen = rekenen.Counter(dr);
-
-            
-
             if (aantallen[0].Id == 0)
             {
                 return aantallen[0].Name;
@@ -96,8 +92,6 @@ namespace Frigo_API_DB.Controllers
                 drankje.Amount = aantallen[i].Amount;
                 frigoContext.SaveChanges();
             }
-
-
             return "Good";
         }
 
@@ -133,7 +127,11 @@ namespace Frigo_API_DB.Controllers
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo,
-                    id = userExists.Id
+                    id = userExists.Id,
+                    userName = userExists.UserName,
+                    minAmount = frigoContext.Settings.Where(s => s.UserId == userExists.Id).Select(u => u.SendAmount).SingleOrDefault(),
+                    EmailToSendTo = frigoContext.Settings.Where(s => s.UserId == userExists.Id).Select(u => u.EmailToSendTo).SingleOrDefault(),
+                    checkBoxValue = frigoContext.Settings.Where(s => s.UserId == userExists.Id).Select(u => u.WantToRecieveNotification).SingleOrDefault()
                 });
             }
             return new BadRequestObjectResult(new { message = "EmailOrPasswordIsNotCorrect" });
@@ -172,7 +170,15 @@ namespace Frigo_API_DB.Controllers
             {
                 return new BadRequestObjectResult(new { message = "UserCouldnotBeMade" });
             }
-            return Ok();
+            //make settings for this id
+            Settings newUserSettings = new Settings();
+            newUserSettings.EmailToSendTo = register.Email;
+            newUserSettings.SendAmount = 5;
+            newUserSettings.UserId = await _userManager.GetUserIdAsync(personToAdd);
+            frigoContext.Settings.Add(newUserSettings);
+            frigoContext.SaveChanges();
+            return Ok(frigoContext.Settings.Where(s => s.UserId == newUserSettings.UserId).ToList());
+            
         }
 
 

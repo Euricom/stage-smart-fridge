@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Frigo_API_DB.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,14 @@ namespace Frigo_API_DB.Data
 {       //this is inherriting from dbContext class but does more now.
     public class FridgeDbContext: IdentityDbContext<Person>
     {
+        public DbSet<Amounts> Hoeveelheden { get; set; }
+        public DbSet<Person> Persons { get; set; }
+        public DbSet<Settings> Settings { get; set; }
         public FridgeDbContext(DbContextOptions<FridgeDbContext> options): base(options)
         {
         }
 
-        public DbSet<Amounts> Hoeveelheden { get; set; }
-        public DbSet<Person> Persons { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -27,6 +30,7 @@ namespace Frigo_API_DB.Data
             hoeveelheid.Property(nameof(Amounts.Amount)).IsRequired().HasColumnName("Aantal");
             hoeveelheid.Property(nameof(Amounts.Name)).IsRequired().HasColumnName("Naam");
 
+            modelBuilder.ApplyConfiguration(new SettingsConfiguration());
             //var person = modelBuilder.Entity<Person>();
             //person.ToTable("Persons");
             //person.HasKey("Id").IsClustered();
@@ -36,7 +40,7 @@ namespace Frigo_API_DB.Data
 
 
 
-            //modelBuilder.Seed();
+            modelBuilder.Seed();
 
 
         }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Frigo_API_DB.Controllers
 {
-    
+    [Authorize]
     [Route("Table")]
     [ApiController]
     public class TableController : Controller
@@ -18,7 +18,6 @@ namespace Frigo_API_DB.Controllers
         private readonly UserManager<Person> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         public IConfiguration _configuration;
-
         private FridgeDbContext frigoContext;
         public TableController(UserManager<Person> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, FridgeDbContext context)
         {
@@ -28,17 +27,10 @@ namespace Frigo_API_DB.Controllers
             this.frigoContext = context;
         }
 
-        [Authorize]
-        [HttpGet("persAuth")]
-        public List<Person> GetPersonAuth()
+        [HttpGet("fridgeContent")]
+        public List<Amounts>GetFridgeContent()
         {
-            return frigoContext.Persons.ToList();
-        }
-
-        [HttpGet("pers")]
-        public List<Person> GetPerson()
-        {
-            return frigoContext.Persons.ToList();
+            return frigoContext.Hoeveelheden.ToList();
         }
     }
 }

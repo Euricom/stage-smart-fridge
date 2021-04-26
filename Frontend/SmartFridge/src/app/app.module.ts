@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -17,6 +17,15 @@ import { MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatExpansionModule} from '@angular/material/expansion';
+import { Interceptor } from './classes/Interceptor';
+import {MatTableModule} from '@angular/material/table';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { AuthenticationService } from './Services/authentication.service';
+ import { AuthGuardService } from './Services/auth-guard.service';
+ import { TableService} from './Services/table.service';
+ import { UserService } from './Services/user.service';
+ import { ConfirmEqualValidator } from './classes/confirmEqualValidator';
 
 
 
@@ -28,7 +37,8 @@ import {MatMenuModule} from '@angular/material/menu';
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    SettingsComponent
+    SettingsComponent,
+    ConfirmEqualValidator
   ],
   imports: [
     FormsModule,
@@ -44,9 +54,13 @@ import {MatMenuModule} from '@angular/material/menu';
     ReactiveFormsModule,
     MatSidenavModule,
     MatRadioModule,
-    MatMenuModule
+    MatMenuModule,
+    MatExpansionModule,
+    MatTableModule,
+    MatCheckboxModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },AuthenticationService, AuthGuardService, TableService, UserService],
+  
   bootstrap: [AppComponent]
 })
 export class AppModule { }

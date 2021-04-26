@@ -1,0 +1,33 @@
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+body{
+    background-color: #EDEDEF;
+}
+
+div.plMenuCSS { 
+    max-width:500px;
+    background-color:lightgreen;
+    }
+
+.card
+{
+    width: 25%;
+    margin: auto;
+    margin-top: 5%;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  
+}
+
+.left {
+  display: flex;
+  justify-content: left;
+}
+.title{
+  font-size: 24px;
+}

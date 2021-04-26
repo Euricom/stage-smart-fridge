@@ -38,7 +38,7 @@
                 <div class="center">
                     <mat-form-field appearance="fill">
                         <mat-label>Wachtwoord</mat-label>
-                        <input matInput [type]="hide ? 'password' : 'text'" name="password" formControlName="password">
+                        <input matInput [type]="hide ? 'password' : 'text'" name="password" formControlName="password" (change)="form.get('passwords.passwordRepeat')?.updateValueAndValidity() ">
                         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
                             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
@@ -49,7 +49,7 @@
                     <mat-form-field appearance="fill">
                         <mat-label>Herhaal wachtwoord</mat-label>
 
-                        <input matInput [type]="hide ? 'password' : 'text'" name="passwordRepeat"  formControlName="passwordRepeat">
+                        <input matInput [type]="hide ? 'password' : 'text'" name="passwordRepeat"  formControlName="passwordRepeat" appConfirmEqualValidator="password">
                         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
                             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
@@ -59,11 +59,11 @@
                 </div>
             </div>
             <div *ngIf="servererror" class="center">
-                <p color="red">{{errorToShow}}</p>
+                <p>{{errorToShow}}</p>
             </div>
 
             <div class="center">
-                <button  mat-raised-button  color="primary" [disabled]="!form.valid">Registreer</button>
+                <button  mat-raised-button  color="primary" [disabled]="!form.valid" type="submit">Registreer</button>
             </div>
         </form>
         <div class="center">
