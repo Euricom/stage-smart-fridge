@@ -1,17 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
-import { PersonLogin } from '../classes/PersonLogin';
-import { PersonRegister } from '../classes/PersonRegister';
-import { LoginValues } from '../classes/LoginValues';
-import { UserService } from '../Services/user.service';
+import { PersonLogin } from './person-login';
+import { PersonRegister } from './person-register';
+import { LoginValues } from './login-values';
+import { UserService } from '../users/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  constructor(private http: HttpClient, private UserService: UserService) { }
+  constructor(private http: HttpClient, private userService: UserService) { }
   
   
   private personLoginData = new PersonLogin("","");
@@ -47,7 +47,7 @@ export class AuthenticationService {
     localStorage.setItem('expires_at', tok.expiration.toString());
     localStorage.setItem('Id', tok.id);
     localStorage.setItem('username', tok.userName);
-    this.UserService.setUserSettingsAfterLogin(tok.minAmount, tok.emailToSendTo, tok.checkBoxValue, tok.id);
+    this.userService.setUserSettingsAfterLogin(tok.minAmount, tok.emailToSendTo, tok.checkBoxValue, tok.id);
   }
 
   isLogedIn()

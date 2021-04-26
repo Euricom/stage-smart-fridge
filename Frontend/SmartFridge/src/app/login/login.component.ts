@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
-import { AuthenticationService } from '../Services/authentication.service'
-import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import { AuthenticationService } from '../services/authentication/authentication.service'
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router'; 
 
 
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   token: string = "";
   hide: boolean = true;
   wrongPasswordForEmail: boolean = false;
-  constructor(private AuthenticationService: AuthenticationService, private route:Router) { }
+  constructor(private authenticationService: AuthenticationService, private route:Router) { }
 
   form: FormGroup = new FormGroup({
     'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
@@ -40,12 +40,11 @@ export class LoginComponent implements OnInit {
     this.email = this.form?.get('emailAdress')?.value;
     this.password = this.form?.get('password')?.value;  
 
-    this.AuthenticationService.login(this.email, this.password).subscribe(
+    this.authenticationService.login(this.email, this.password).subscribe(
       data =>
       {
         this.wrongPasswordForEmail = false;
-        console.log(data.emailToSendTo);
-        this.AuthenticationService.saveTokenAndUsername(data);
+        this.authenticationService.saveTokenAndUsername(data);
         this.route.navigate(['/home']);
       },
       recievedError =>
@@ -58,7 +57,6 @@ export class LoginComponent implements OnInit {
 
   CheckError(errorMessage: string)
   {
-    console.log(errorMessage);
     if(errorMessage == "EmailOrPasswordIsNotCorrect")
     {
       this.wrongPasswordForEmail = true;

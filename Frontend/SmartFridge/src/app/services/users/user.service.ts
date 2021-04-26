@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Settings } from '../classes/Settings';
+import { Settings } from './settings';
 
 @Injectable({
   providedIn: 'root'
@@ -15,22 +15,22 @@ export class UserService {
   private Settings = new Settings("","",0,false);
 
 
-  setUserSettingsAfterLogin(Minimum: number, Email: string, checkBox: boolean, Id: string)
+  setUserSettingsAfterLogin(minimum: number, email: string, checkBox: boolean, id: string)
   {
     
-    this.Settings.emailToSendTo = Email;
-    this.Settings.sendAmount = Minimum;
+    this.Settings.emailToSendTo = email;
+    this.Settings.sendAmount = minimum;
     this.Settings.wantToRecieveNotification = checkBox;
-    this.Settings.userId = Id;
+    this.Settings.userId = id;
     localStorage.setItem("Settings", JSON.stringify(this.Settings))
   }
 
-  setUserSettingsInServer(Minimum: number, Email: string, checkBox: boolean)
+  setUserSettingsInServer(minimum: number, email: string, checkBox: boolean)
   {
     //To get the id
     this.Settings = this.getUserSettings();
-    this.Settings.emailToSendTo = Email;
-    this.Settings.sendAmount= Minimum;
+    this.Settings.emailToSendTo = email;
+    this.Settings.sendAmount= minimum;
     this.Settings.wantToRecieveNotification = checkBox;
     
 
@@ -41,14 +41,7 @@ export class UserService {
     return this.http.post<string>(urlLoc, this.Settings)
   }
 
-  //not needed I think
-  // getUserSettingsFromServer()
-  // {
-  //   const urlLoc = "https://localhost:5001/Settings/getSettings";
-  //   const url = "https://frigoapieuricom.azurewebsites.net/Settings/getSettings";
-  //   console.log(localStorage.getItem("Id"))
-  //   return this.http.post<Settings>(urlLoc, localStorage.getItem("Id"));
-  // }
+ 
 
   getUserSettings()
   {

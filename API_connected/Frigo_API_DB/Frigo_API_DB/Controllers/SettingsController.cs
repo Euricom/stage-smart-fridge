@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Frigo_API_DB.Controllers
 {
-    
+    [Authorize]
     [Route("Settings")]
     [ApiController]
     public class SettingsController : Controller

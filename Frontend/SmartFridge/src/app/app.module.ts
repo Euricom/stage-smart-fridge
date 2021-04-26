@@ -18,14 +18,14 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { Interceptor } from './classes/Interceptor';
+import { Interceptor } from './config/Interceptor';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import { AuthenticationService } from './Services/authentication.service';
- import { AuthGuardService } from './Services/auth-guard.service';
- import { TableService} from './Services/table.service';
- import { UserService } from './Services/user.service';
- import { ConfirmEqualValidator } from './classes/confirmEqualValidator';
+import { AuthenticationService } from './services/authentication/authentication.service';
+ import { AuthGuardService } from './config/auth-guard.service';
+ import { TableService} from './services/table/table.service';
+ import { UserService } from './services/users/user.service';
+ import { ConfirmEqualValidator } from './models/confirmEqualValidator';
 
 
 
