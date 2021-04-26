@@ -59,7 +59,16 @@ import { AuthenticationService } from './services/authentication/authentication.
     MatTableModule,
     MatCheckboxModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },AuthenticationService, AuthGuardService, TableService, UserService],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: Interceptor, multi: true 
+    },
+    AuthenticationService, 
+    AuthGuardService, 
+    TableService,
+    UserService
+    ],
   
   bootstrap: [AppComponent]
 })
