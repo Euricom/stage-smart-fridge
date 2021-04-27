@@ -26,6 +26,7 @@ import { AuthenticationService } from './services/authentication/authentication.
  import { TableService} from './services/table/table.service';
  import { UserService } from './services/users/user.service';
  import { ConfirmEqualValidator } from './models/confirmEqualValidator';
+ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -57,7 +58,8 @@ import { AuthenticationService } from './services/authentication/authentication.
     MatMenuModule,
     MatExpansionModule,
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSnackBarModule
   ],
   providers: [
     {

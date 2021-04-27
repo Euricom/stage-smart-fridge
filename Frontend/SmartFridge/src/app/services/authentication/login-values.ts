@@ -1,3 +1,11 @@
+export interface ILoginValues 
+{
+    token: string;
+    expiration: Date;
+    id: string;
+    userName: string;
+}
+
 export class LoginValues
 {
     constructor
@@ -5,10 +13,7 @@ export class LoginValues
         public token: string,
         public expiration: Date,
         public id: string,
-        public userName: string,
-        public minAmount: number,
-        public emailToSendTo: string,
-        public checkBoxValue: boolean
+        public userName: string
      ) 
      {}
 }

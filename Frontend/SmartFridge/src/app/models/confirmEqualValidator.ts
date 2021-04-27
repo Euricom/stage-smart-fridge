@@ -13,9 +13,6 @@ import { AbstractControl, NG_VALIDATORS, Validator } from "@angular/forms";
 
 export class ConfirmEqualValidator implements Validator
 {
-    
-    //{[key:string]: any}
-    //ValidationErrors
     @Input() appConfirmEqualValidator: string = "";
     validate(control: AbstractControl): {[key:string]: any} | null {
         const controlToCompare = control.parent?.get(this.appConfirmEqualValidator);

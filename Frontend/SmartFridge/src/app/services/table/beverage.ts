@@ -1,3 +1,10 @@
+export interface Ibeverage 
+{
+    id: number;
+    name: string;
+    amount: number;
+}
+
 export class Beverage
 {
     constructor

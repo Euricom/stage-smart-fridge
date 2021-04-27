@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import { TableService } from '../services/table/table.service'
 import { AuthenticationService } from '../services/authentication/authentication.service'
 import { UserService } from '../services/users/user.service';
+import { tableAndMinAmount } from '../services/table/table-and-minamount';
 
 
 
@@ -31,7 +32,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    this.minAmount = this.userService.getMinAmount();
     this.onGetDrinksFromDatabase();
     this.name = this.authenticationService.getUsername();
   }
@@ -39,9 +39,10 @@ export class HomeComponent implements OnInit {
   onGetDrinksFromDatabase()
   {
     this.tableService.getBeverages().subscribe(
-      (response: Beverage[] ) =>
+      response =>
       {
-        this.beveragesInTheFridge = response;
+        this.beveragesInTheFridge = response.tableData;
+        this.minAmount = response.minAmount;
       },
       (error) => console.log(error)
     );

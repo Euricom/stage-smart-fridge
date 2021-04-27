@@ -11,22 +11,21 @@ import {Router} from '@angular/router';
 export class RegisterComponent implements OnInit {
 
   
-  email: string = "";
-  password: string = "";
-  firstName: string = "";
-  lastName: string = "";
+ 
   hide: boolean = true;
-  registerErrorMessage: string = "";
+  
   errorToShow: string = "";
   servererror: boolean = false;
+  //This checks that the password contains atleast 1 capital letter, 1 small letter, 1 special karakter, 1 number and in total 8 karakters
+  passwordValidator: string = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
  
   constructor(private authenticationService:  AuthenticationService, private route:Router) { }
 
   form: FormGroup = new FormGroup({
     'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
     'passwords': new FormGroup({
-      'password': new FormControl(null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)]),
-      'passwordRepeat': new FormControl(null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)])
+      'password': new FormControl(null, [Validators.required, Validators.pattern(this.passwordValidator)]),
+      'passwordRepeat': new FormControl(null, [Validators.required, Validators.pattern(this.passwordValidator)])
     }),  
     'name': new FormGroup({
       'FirstName' : new FormControl(null, [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
@@ -100,27 +99,21 @@ export class RegisterComponent implements OnInit {
   
 
   onSubmit() {
-    this.email = this.form?.get('emailAdress')?.value;
-    this.password = this.form?.get('passwords.password')?.value;
-    this.firstName = this.form?.get('name.FirstName')?.value;
-    this.lastName = this.form?.get('name.LastName')?.value;
-
-    this.authenticationService.registerNewPerson(this.email, this.password, this.firstName, this.lastName).subscribe(
+    this.authenticationService.registerNewPerson(this.form?.get('emailAdress')?.value, this.form?.get('passwords.password')?.value, this.form?.get('name.FirstName')?.value, this.form?.get('name.LastName')?.value).subscribe(
       data =>
       {
         this.route.navigate(['/login']);
       },
       recievedError =>
       {
-        this.registerErrorMessage = recievedError.error.message
-        this.CheckError();
+        this.CheckError(recievedError.error.message);
       }
     );
   }
 
-  CheckError()
+  CheckError(error : string)
   {
-    switch(this.registerErrorMessage) { 
+    switch(error) { 
       case "EmailAlreadyExists": { 
          this.errorToShow = "E-mail adres bestaat al";
          this.servererror = true;

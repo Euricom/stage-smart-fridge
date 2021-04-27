@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Settings } from './settings';
+import { Settings, ISettings } from './settings';
 
 @Injectable({
   providedIn: 'root'
@@ -9,49 +9,27 @@ import { Settings } from './settings';
 export class UserService {
   
   constructor(private http: HttpClient) {}
-  
-  
-  
-  private Settings = new Settings("","",0,false);
-
-
-  setUserSettingsAfterLogin(minimum: number, email: string, checkBox: boolean, id: string)
-  {
-    
-    this.Settings.emailToSendTo = email;
-    this.Settings.sendAmount = minimum;
-    this.Settings.wantToRecieveNotification = checkBox;
-    this.Settings.userId = id;
-    localStorage.setItem("Settings", JSON.stringify(this.Settings))
-  }
 
   setUserSettingsInServer(minimum: number, email: string, checkBox: boolean)
   {
-    //To get the id
-    this.Settings = this.getUserSettings();
-    this.Settings.emailToSendTo = email;
-    this.Settings.sendAmount= minimum;
-    this.Settings.wantToRecieveNotification = checkBox;
-    
-
-    localStorage.setItem("Settings", JSON.stringify(this.Settings));
-    
+    // I can't set this line directly in my http I don't know why. Is it wrog to do this this way
+    const Id = localStorage.getItem("Id");
     const urlLoc = "https://localhost:5001/Settings/setSettings";
     const url = "https://frigoapieuricom.azurewebsites.net/Settings/setSettings";
-    return this.http.post<string>(urlLoc, this.Settings)
+    return this.http.post<string>(urlLoc, {"EmailToSendTo" : email,"UserId": Id,"SendAmount": minimum,"WantToRecieveNotification": checkBox})
   }
 
- 
+  
+
+  
 
   getUserSettings()
   {
-    this.Settings = JSON.parse(localStorage.getItem('Settings') || "{}");
-    return this.Settings;
+    
+    const urlLoc = "https://localhost:5001/Settings/getSettings";
+    const url = "https://frigoapieuricom.azurewebsites.net/Settings/getSettings";
+    const Id = localStorage.getItem("Id");
+    return this.http.get<ISettings>(urlLoc);
   }
 
-  getMinAmount()
-  {
-    this.Settings = JSON.parse(localStorage.getItem('Settings') || "{}");
-    return this.Settings.sendAmount;
-  }
 }

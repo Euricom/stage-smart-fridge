@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {Router} from '@angular/router'; 
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { UserService } from '../services/users/user.service';
-import { Settings } from '../services/users/settings';
+import { Settings, ISettings } from '../services/users/settings';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -15,13 +16,13 @@ export class SettingsComponent implements OnInit {
 
   ;
 
-  constructor(private authenticationService: AuthenticationService, private route:Router, private userService: UserService) { }
+  constructor(private authenticationService: AuthenticationService, private route:Router, private userService: UserService, private _snackBar: MatSnackBar) { }
 
   name: string="";
   panelOpenState = false;
   checked: boolean = false;
   Settings = new Settings("","",0,false);
-
+  durationInSeconds = 5;
   
   form: FormGroup = new FormGroup({
     'Minimum': new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]*$/)]),
@@ -31,11 +32,18 @@ export class SettingsComponent implements OnInit {
  
   ngOnInit(): void 
   {
+    
     this.name = this.authenticationService.getUsername();
-    this.Settings = this.userService.getUserSettings();
-    this.form.patchValue({"Minimum": this.Settings.sendAmount});
-    this.form.patchValue({"Email": this.Settings.emailToSendTo});
-    this.form.patchValue({"Checkbox": this.Settings.wantToRecieveNotification});
+    this.userService.getUserSettings().subscribe(
+      (response: ISettings) =>
+      {
+        this.form.patchValue({"Minimum": response.sendAmount});
+        this.form.patchValue({"Email": response.emailToSendTo});
+        this.form.patchValue({"Checkbox": response.wantToRecieveNotification});
+      },
+      (error) => console.log(error)
+    );
+    
     
   }
  
@@ -44,12 +52,17 @@ export class SettingsComponent implements OnInit {
     this.userService.setUserSettingsInServer(this.form.get('Minimum')?.value, this.form.get('Email')?.value, this.form.get('Checkbox')?.value).subscribe(
           (response: string) =>
           {
-            
+            this._snackBar.open("De instellingen zijn aangepast", "sluit", {duration: 3000});
           },
-          (error) => console.log(error)
+          (error) => 
+          {
+            this._snackBar.open("De instellingen konden niet worden aangepast", "sluit", {duration: 3000});
+          }
         );
   }
 
+ 
+  
   getErrorMessageMinimum()
   {
     if (this.form.get('Minimum')?.hasError('required')) {

@@ -13,9 +13,6 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  email: string = "";
-  password: string = "";
-  token: string = "";
   hide: boolean = true;
   wrongPasswordForEmail: boolean = false;
   constructor(private authenticationService: AuthenticationService, private route:Router) { }
@@ -25,7 +22,6 @@ export class LoginComponent implements OnInit {
     'password': new FormControl(null, Validators.required)
   });
   
-
   ngOnInit(): void {
   }
 
@@ -37,10 +33,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {  
-    this.email = this.form?.get('emailAdress')?.value;
-    this.password = this.form?.get('password')?.value;  
-
-    this.authenticationService.login(this.email, this.password).subscribe(
+    this.authenticationService.login(this.form?.get('emailAdress')?.value, this.form?.get('password')?.value).subscribe(
       data =>
       {
         this.wrongPasswordForEmail = false;

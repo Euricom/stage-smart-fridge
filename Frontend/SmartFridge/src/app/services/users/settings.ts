@@ -1,3 +1,11 @@
+export interface ISettings
+{
+    emailToSendTo: string;
+    userId: string;
+    sendAmount: number;
+    wantToRecieveNotification: boolean;
+}
+
 export class Settings 
 {
     constructor

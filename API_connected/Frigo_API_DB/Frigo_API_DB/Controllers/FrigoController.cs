@@ -109,7 +109,8 @@ namespace Frigo_API_DB.Controllers
                 //Make shure that you can find the name for who is the token.
                 var authClaims = new[]
                 {
-                    new Claim(ClaimTypes.Email, userExists.Email)
+                    new Claim(ClaimTypes.Email, userExists.Email),
+                    new Claim(ClaimTypes.NameIdentifier, userExists.Id)
                 };
                 //This helps to make the token with a secret key that only the server side knowa about
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwtToken:secret"]));
@@ -129,10 +130,7 @@ namespace Frigo_API_DB.Controllers
                     expiration = token.ValidTo,
                     id = userExists.Id,
                     userName = userExists.UserName,
-                    minAmount = frigoContext.Settings.Where(s => s.UserId == userExists.Id).Select(u => u.SendAmount).SingleOrDefault(),
-                    EmailToSendTo = frigoContext.Settings.Where(s => s.UserId == userExists.Id).Select(u => u.EmailToSendTo).SingleOrDefault(),
-                    checkBoxValue = frigoContext.Settings.Where(s => s.UserId == userExists.Id).Select(u => u.WantToRecieveNotification).SingleOrDefault()
-                });
+                 });
             }
             return new BadRequestObjectResult(new { message = "EmailOrPasswordIsNotCorrect" });
         }
@@ -177,7 +175,7 @@ namespace Frigo_API_DB.Controllers
             newUserSettings.UserId = await _userManager.GetUserIdAsync(personToAdd);
             frigoContext.Settings.Add(newUserSettings);
             frigoContext.SaveChanges();
-            return Ok(frigoContext.Settings.Where(s => s.UserId == newUserSettings.UserId).ToList());
+            return Ok();
             
         }
 
