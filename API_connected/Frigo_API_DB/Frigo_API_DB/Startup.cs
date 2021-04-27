@@ -17,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,8 +61,8 @@ namespace Frigo_API_DB
                     );
             });
             services.AddIdentity<Person, IdentityRole>(options => { options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "; }).AddEntityFrameworkStores<FridgeDbContext>();
-
             
+
 
 
             services.AddAuthentication(options =>
@@ -96,6 +97,7 @@ namespace Frigo_API_DB
                 options.Password.RequiredLength = 8;
                 options.Password.RequiredUniqueChars = 1;
             });
+            
 
 
 

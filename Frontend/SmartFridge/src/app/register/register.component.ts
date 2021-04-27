@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../Services/authentication.service'
-import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import { AuthenticationService } from '../services/authentication/authentication.service'
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router'; 
-import { ConfirmedValidator } from '../classes/passMatch';
 
 @Component({
   selector: 'app-register',
@@ -12,22 +11,21 @@ import { ConfirmedValidator } from '../classes/passMatch';
 export class RegisterComponent implements OnInit {
 
   
-  email: string = "";
-  password: string = "";
-  firstName: string = "";
-  lastName: string = "";
+ 
   hide: boolean = true;
-  registerErrorMessage: string = "";
+  
   errorToShow: string = "";
   servererror: boolean = false;
+  //This checks that the password contains atleast 1 capital letter, 1 small letter, 1 special karakter, 1 number and in total 8 karakters
+  passwordValidator: string = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
  
-  constructor(private AuthenticationService:  AuthenticationService, private route:Router) { }
+  constructor(private authenticationService:  AuthenticationService, private route:Router) { }
 
   form: FormGroup = new FormGroup({
     'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
     'passwords': new FormGroup({
-      'password': new FormControl(null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)]),
-      'passwordRepeat': new FormControl(null, [ Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/),this.test()])
+      'password': new FormControl(null, [Validators.required, Validators.pattern(this.passwordValidator)]),
+      'passwordRepeat': new FormControl(null, [Validators.required, Validators.pattern(this.passwordValidator)])
     }),  
     'name': new FormGroup({
       'FirstName' : new FormControl(null, [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
@@ -35,19 +33,6 @@ export class RegisterComponent implements OnInit {
     })
   });
 
-
-  test(): ValidatorFn 
-  {
-    return (currentControl: AbstractControl): { [key: string]: any } |null => 
-    {
-      if(this.form?.get('password.password')?.value != this.form?.get('password.passwordRepeat')?.value)
-    {
-      return{ 'passwordsNotMatching': true};
-    }
-    return null;
-    }
-  }
-  
 
   ngOnInit()  {
     this.servererror = false;
@@ -68,7 +53,7 @@ export class RegisterComponent implements OnInit {
     if (this.form.get('passwords.password')?.hasError('pattern')) {
       return 'Hoofdletter, nummer en spaciaal karakter is verplicht min 8 karakters';
     }
-    return "Wachtwoorden komen niet overeen"
+    return "Fout met de wachtwoorden"
   }
   getErrorMessagePasswordPaswordRepead() {
     if (this.form.get('passwords.passwordRepeat')?.hasError('required')) {
@@ -77,11 +62,11 @@ export class RegisterComponent implements OnInit {
     if (this.form.get('passwords.passwordRepeat')?.hasError('pattern')) {
       return 'Hoofdletter, nummer en spaciaal karakter is verplicht min 8 karakters';
     }
-    if(this.form.get('passwords.passwordRepeat')?.hasError('notEaual'))
+    if(this.form.get('passwords.passwordRepeat')?.hasError('notEqual'))
     {
-      console.log("test");
+      return "Wachtwoorden komen niet overeen"
     }
-    return "Wachtwoorden komen niet overeen"
+    return "Fout met de wachtwoorden"
   }
   getErrorMessageFirstName()
   {
@@ -114,27 +99,21 @@ export class RegisterComponent implements OnInit {
   
 
   onSubmit() {
-    this.email = this.form?.get('emailAdress')?.value;
-    this.password = this.form?.get('passwords.password')?.value;
-    this.firstName = this.form?.get('name.FirstName')?.value;
-    this.lastName = this.form?.get('name.LastName')?.value;
-
-    this.AuthenticationService.registerNewPerson(this.email, this.password, this.firstName, this.lastName).subscribe(
+    this.authenticationService.registerNewPerson(this.form?.get('emailAdress')?.value, this.form?.get('passwords.password')?.value, this.form?.get('name.FirstName')?.value, this.form?.get('name.LastName')?.value).subscribe(
       data =>
       {
         this.route.navigate(['/login']);
       },
       recievedError =>
       {
-        this.registerErrorMessage = recievedError.error.message
-        this.CheckError();
+        this.CheckError(recievedError.error.message);
       }
     );
   }
 
-  CheckError()
+  CheckError(error : string)
   {
-    switch(this.registerErrorMessage) { 
+    switch(error) { 
       case "EmailAlreadyExists": { 
          this.errorToShow = "E-mail adres bestaat al";
          this.servererror = true;

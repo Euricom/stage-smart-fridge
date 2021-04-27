@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Beverage } from '../classes/Beverage';
+import { Beverage } from '../services/table/beverage';
 import {Router} from '@angular/router'; 
-import { TableService } from '../Services/table.service'
-import { AuthenticationService } from '../Services/authentication.service'
-import { UserService } from '../Services/user.service';
+import { TableService } from '../services/table/table.service'
+import { AuthenticationService } from '../services/authentication/authentication.service'
+import { UserService } from '../services/users/user.service';
+import { tableAndMinAmount } from '../services/table/table-and-minamount';
 
 
 
@@ -21,10 +21,9 @@ import { UserService } from '../Services/user.service';
 export class HomeComponent implements OnInit {
 
   
-  constructor(private AuthenticationService: AuthenticationService, private TableService: TableService, private route:Router, private UserService: UserService) { }
+  constructor(private authenticationService: AuthenticationService, private tableService: TableService, private route:Router, private userService: UserService) { }
 
   displayedColumns: string[] = ['name', 'amount', 'symbol'];
-  
 
   minAmount: number = 10;
   beveragesInTheFridge: Beverage[] = [];
@@ -33,17 +32,17 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    this.minAmount = this.UserService.getMinAmount();
     this.onGetDrinksFromDatabase();
-    this.name = this.AuthenticationService.getUsername();
+    this.name = this.authenticationService.getUsername();
   }
 
   onGetDrinksFromDatabase()
   {
-    this.TableService.getBeverages().subscribe(
-      (response: Beverage[] ) =>
+    this.tableService.getBeverages().subscribe(
+      response =>
       {
-        this.beveragesInTheFridge = response;
+        this.beveragesInTheFridge = response.tableData;
+        this.minAmount = response.minAmount;
       },
       (error) => console.log(error)
     );
@@ -51,7 +50,7 @@ export class HomeComponent implements OnInit {
 
   logout()
   {
-    this.AuthenticationService.logout();
+    this.authenticationService.logout();
     this.route.navigate(['/login']);
   }
 }

@@ -1,4 +1,5 @@
 ﻿using Frigo_API_DB.Data;
+using Frigo_API_DB.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Frigo_API_DB.Controllers
@@ -28,9 +30,13 @@ namespace Frigo_API_DB.Controllers
         }
 
         [HttpGet("fridgeContent")]
-        public List<Amounts>GetFridgeContent()
+        public TableReturnModel GetFridgeContent()
         {
-            return frigoContext.Hoeveelheden.ToList();
+            TableReturnModel values = new TableReturnModel();
+            values.tableData = frigoContext.Hoeveelheden.ToList();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            values.minAmount = frigoContext.Settings.Where(s => s.UserId == userId).Select(u => u.SendAmount).SingleOrDefault();
+            return values;
         }
     }
 }
