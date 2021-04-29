@@ -2,6 +2,8 @@ import { Component, OnInit} from '@angular/core';
 import { AuthenticationService } from '../services/authentication/authentication.service'
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router'; 
+import { Observable, Subscription } from 'rxjs';
+import { LoginValues } from '../services/authentication/login-values';
 
 
 
@@ -13,6 +15,8 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+  subscription: Subscription | undefined;
+  login$: Observable<LoginValues> | undefined;
   hide: boolean = true;
   wrongPasswordForEmail: boolean = false;
   constructor(private authenticationService: AuthenticationService, private route:Router) { }
@@ -33,12 +37,13 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {  
-    this.authenticationService.login(this.form?.get('emailAdress')?.value, this.form?.get('password')?.value).subscribe(
+    this.login$ = this.authenticationService.login(this.form?.get('emailAdress')?.value, this.form?.get('password')?.value);
+    this. subscription = this.login$.subscribe(
       data =>
       {
         this.wrongPasswordForEmail = false;
         this.authenticationService.saveTokenAndUsername(data);
-        this.route.navigate(['/home']);
+        this.route.navigate(['/menu/home']);
       },
       recievedError =>
       {
@@ -56,7 +61,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  
+  ngOnDestroy()
+  {
+    this.subscription?.unsubscribe();
+  }
   
 
 }

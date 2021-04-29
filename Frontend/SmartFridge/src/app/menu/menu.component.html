@@ -1,0 +1,14 @@
+<mat-toolbar color="primary" class="app-toolbar">
+    <span class="example-spacer">Smart Fridge</span>
+    <button mat-button [matMenuTriggerFor]="navMenu">
+        <mat-icon>visibility</mat-icon>{{name}}
+    </button>
+        <mat-menu #navMenu="matMenu" xPosition="before" color="primary">
+            <div color="primary">
+            <p mat-menu-item (click)="logout()" class="plMenuCSS">Loguit</p>
+            <p mat-menu-item  routerLink="/menu/home">Tabel</p>
+            <p mat-menu-item  routerLink="/menu/settings">Instellingen</p>
+            </div>
+        </mat-menu>     
+</mat-toolbar>
+<router-outlet></router-outlet>

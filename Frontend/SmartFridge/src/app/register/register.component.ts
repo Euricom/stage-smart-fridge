@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication/authentication.service'
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router'; 
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
 
-  
- 
+  subscription: Subscription | undefined;
+  registerNewPerson$: Observable<string> | undefined;
   hide: boolean = true;
   
   errorToShow: string = "";
@@ -20,7 +21,8 @@ export class RegisterComponent implements OnInit {
   passwordValidator: string = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
  
   constructor(private authenticationService:  AuthenticationService, private route:Router) { }
-
+  
+  
   form: FormGroup = new FormGroup({
     'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
     'passwords': new FormGroup({
@@ -99,7 +101,8 @@ export class RegisterComponent implements OnInit {
   
 
   onSubmit() {
-    this.authenticationService.registerNewPerson(this.form?.get('emailAdress')?.value, this.form?.get('passwords.password')?.value, this.form?.get('name.FirstName')?.value, this.form?.get('name.LastName')?.value).subscribe(
+    this.registerNewPerson$ = this.authenticationService.registerNewPerson(this.form?.get('emailAdress')?.value, this.form?.get('passwords.password')?.value, this.form?.get('name.FirstName')?.value, this.form?.get('name.LastName')?.value);
+    this. subscription = this.registerNewPerson$.subscribe(
       data =>
       {
         this.route.navigate(['/login']);
@@ -136,6 +139,11 @@ export class RegisterComponent implements OnInit {
          break; 
       } 
    }
+  }
+
+  ngOnDestroy()
+  {
+    this.subscription?.unsubscribe();
   }
 
 }

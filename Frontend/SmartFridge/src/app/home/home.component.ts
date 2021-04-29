@@ -5,6 +5,7 @@ import { TableService } from '../services/table/table.service'
 import { AuthenticationService } from '../services/authentication/authentication.service'
 import { UserService } from '../services/users/user.service';
 import { tableAndMinAmount } from '../services/table/table-and-minamount';
+import { Observable } from 'rxjs';
 
 
 
@@ -20,33 +21,19 @@ import { tableAndMinAmount } from '../services/table/table-and-minamount';
 
 export class HomeComponent implements OnInit {
 
-  
+  beveragesAndMinimum$: Observable<tableAndMinAmount> | undefined;
   constructor(private authenticationService: AuthenticationService, private tableService: TableService, private route:Router, private userService: UserService) { }
 
   displayedColumns: string[] = ['name', 'amount', 'symbol'];
 
   minAmount: number = 10;
   beveragesInTheFridge: Beverage[] = [];
-  name: string="";
-  panelOpenState = false;
 
   ngOnInit(): void 
   {
-    this.onGetDrinksFromDatabase();
-    this.name = this.authenticationService.getUsername();
+    this.beveragesAndMinimum$ = this.tableService.getBeverages();
   }
 
-  onGetDrinksFromDatabase()
-  {
-    this.tableService.getBeverages().subscribe(
-      response =>
-      {
-        this.beveragesInTheFridge = response.tableData;
-        this.minAmount = response.minAmount;
-      },
-      (error) => console.log(error)
-    );
-  }
 
   logout()
   {

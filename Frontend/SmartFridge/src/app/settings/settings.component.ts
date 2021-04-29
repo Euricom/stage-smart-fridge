@@ -5,6 +5,8 @@ import { AuthenticationService } from '../services/authentication/authentication
 import { UserService } from '../services/users/user.service';
 import { Settings, ISettings } from '../services/users/settings';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 
 @Component({
@@ -14,42 +16,31 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class SettingsComponent implements OnInit {
 
-  ;
+  
 
-  constructor(private authenticationService: AuthenticationService, private route:Router, private userService: UserService, private _snackBar: MatSnackBar) { }
+  constructor(private authenticationService: AuthenticationService, private userService: UserService, private _snackBar: MatSnackBar) { }
 
-  name: string="";
-  panelOpenState = false;
+  settingsObservable$: Observable<Settings> | undefined;
   checked: boolean = false;
   Settings = new Settings("","",0,false);
-  durationInSeconds = 5;
   
   form: FormGroup = new FormGroup({
-    'Minimum': new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]*$/)]),
-    'Email': new FormControl(null, [Validators.required, Validators.email]),
-    'Checkbox': new FormControl(null)
+    'sendAmount': new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]*$/)]),
+    'emailToSendTo': new FormControl(null, [Validators.required, Validators.email]),
+    'wantToRecieveNotification': new FormControl(null)
   });
+
+  
  
   ngOnInit(): void 
   {
-    
-    this.name = this.authenticationService.getUsername();
-    this.userService.getUserSettings().subscribe(
-      (response: ISettings) =>
-      {
-        this.form.patchValue({"Minimum": response.sendAmount});
-        this.form.patchValue({"Email": response.emailToSendTo});
-        this.form.patchValue({"Checkbox": response.wantToRecieveNotification});
-      },
-      (error) => console.log(error)
-    );
-    
+    this.settingsObservable$ = this.userService.getUserSettings().pipe(tap(settingsFromService => this.form.patchValue(settingsFromService)));
     
   }
  
   onSubmit() 
   {
-    this.userService.setUserSettingsInServer(this.form.get('Minimum')?.value, this.form.get('Email')?.value, this.form.get('Checkbox')?.value).subscribe(
+    this.userService.setUserSettingsInServer(this.form.get('sendAmount')?.value, this.form.get('emailToSendTo')?.value, this.form.get('wantToRecieveNotification')?.value).subscribe(
           (response: string) =>
           {
             this._snackBar.open("De instellingen zijn aangepast", "sluit", {duration: 3000});
@@ -80,10 +71,5 @@ export class SettingsComponent implements OnInit {
     }
     return "Geef een geldig e-mailadres"
   }
- 
-  logout()
-  {
-    this.authenticationService.logout();
-    this.route.navigate(['/login']);
-  }
 }
+

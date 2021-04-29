@@ -5,12 +5,17 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AuthGuardService } from './config/auth-guard.service';
+import { MenuComponent } from './menu/menu.component';
 
 const appRoutes: Routes = [
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuardService] },
+  { path: 'menu', component: MenuComponent, children: 
+    [
+      { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
+      { path: 'settings', component: SettingsComponent, canActivate: [AuthGuardService] },
+    ], canActivate: [AuthGuardService]
+  },
   { path: '**', component: HomeComponent, canActivate: [AuthGuardService]}
   ];
 

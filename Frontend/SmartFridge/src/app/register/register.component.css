@@ -5,18 +5,15 @@
     width: 25%;
     margin: auto;
     margin-top: 5%;
+    
 }
 
 .center {
     display: flex;
     justify-content: center;
-    
 }
 
-.left {
-    display: flex;
-    justify-content: left;
-}
+
 
 #sect1 {  
     height: 100%; 
@@ -33,3 +30,4 @@
     font-size: 14px;
     text-decoration: underline;
 }
+

@@ -1,27 +1,32 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
 import { LoginValues, ILoginValues } from './login-values';
 import { UserService } from '../users/user.service';
+import {DatePipe, formatDate} from '@angular/common';
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private userService: UserService, private datePipe: DatePipe) { }
+
+  dateString: string = "";
+  unformattedDate = new Date();
+  testDate = new Date();
 
   registerNewPerson(email: string, password: string, firstName: string, lastName: string  )
   {
-    const url = "https://frigoapieuricom.azurewebsites.net/Frigo/register";
+    const url = environment.apiUrl + "/Frigo/register";
     return this.http.post<string>(url,{email, password, firstName, lastName});
   }
 
   login(email: string, password: string)
   {
-    const urlLoc = "https://localhost:5001/Frigo/login";
-    const url = "https://frigoapieuricom.azurewebsites.net/Frigo/login";
-    return this.http.post<ILoginValues>(urlLoc, {email, password})
+    const url = environment.apiUrl + "/Frigo/login";
+    return this.http.post<ILoginValues>(url, {email, password})
   }
 
   saveTokenAndUsername(tok: LoginValues)
@@ -34,13 +39,26 @@ export class AuthenticationService {
 
   isLogedIn()
   {
-    return moment().isBefore(this.getExpiration());
+    if (localStorage.getItem('expires_at') == null)
+    {
+      return false;
+    }
+    this.unformattedDate = new Date(localStorage.getItem('expires_at') || '{}');
+    this.dateString = formatDate(this.unformattedDate, 'yyyy-MM-dd hh:mm:ss', 'en_US')
+    const expirationDate = new Date(this.dateString);
+    
+    this.unformattedDate = new Date();
+    this.dateString = formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss', 'en_US')
+    const currentDate = new Date(this.dateString);
+    
+    if(currentDate > expirationDate)
+    {
+      return false;
+    }
+    return true;
   }
 
-  getExpiration() {
-    const expiration = localStorage.getItem("expires_at");
-    return moment(expiration);
-  }   
+    
 
 
   logout() {
