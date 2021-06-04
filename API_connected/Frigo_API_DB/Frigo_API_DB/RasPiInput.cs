@@ -17,10 +17,37 @@ namespace Frigo_API_DB
         { 
             // Hier gebeurd niets, maar dit is nodig om de json data die via de post binnenkomt op te vangen.
         }
-
-        public RasPiInput(string naam, float prob, int tag, Circumference k)
+        public RasPiInput(float prob, int tag, Circumference k)
         {
-            Tagname = naam;
+            switch (tag)
+            {
+                case 1:
+                    Tagname = "ColaCan";
+                    break;
+                case 2:
+                    Tagname = "FantaCan";
+                    break;
+                case 3:
+                    Tagname = "SpriteLemonCan";
+                    break;
+                case 4:
+                    Tagname = "Upperside";
+                    break;
+                case 5:
+                    Tagname = "VanishingLine";
+                    break;
+                default:
+                    Tagname = "UnKnown";
+                    break;
+            }
+
+            Probability = prob;
+            Tagid = tag;
+            Boundingbox = k;
+        }
+        public RasPiInput(string name, float prob, int tag, Circumference k)
+        {
+            Tagname = name;
             Probability = prob;
             Tagid = tag;
             Boundingbox = k;

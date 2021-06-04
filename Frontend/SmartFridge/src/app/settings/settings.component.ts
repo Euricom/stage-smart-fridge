@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {Router} from '@angular/router'; 
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { UserService } from '../services/users/user.service';
-import { Settings, ISettings } from '../services/users/settings';
+import { Settings} from '../services/users/settings';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 
@@ -20,7 +19,9 @@ export class SettingsComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService, private userService: UserService, private _snackBar: MatSnackBar) { }
 
-  settingsObservable$: Observable<Settings> | undefined;
+  subscription: Subscription | undefined;
+  settingsObservableget$: Observable<Settings> | undefined;
+  settingsObservableset$: Observable<string> | undefined;
   checked: boolean = false;
   Settings = new Settings("","",0,false);
   
@@ -31,16 +32,19 @@ export class SettingsComponent implements OnInit {
   });
 
   
+
+ 
  
   ngOnInit(): void 
   {
-    this.settingsObservable$ = this.userService.getUserSettings().pipe(tap(settingsFromService => this.form.patchValue(settingsFromService)));
+    this.settingsObservableget$ = this.userService.getUserSettings().pipe(tap(settingsFromService => this.form.patchValue(settingsFromService)));
     
   }
  
   onSubmit() 
   {
-    this.userService.setUserSettingsInServer(this.form.get('sendAmount')?.value, this.form.get('emailToSendTo')?.value, this.form.get('wantToRecieveNotification')?.value).subscribe(
+    this.settingsObservableset$ = this.userService.setUserSettingsInServer(this.form.get('sendAmount')?.value, this.form.get('emailToSendTo')?.value, this.form.get('wantToRecieveNotification')?.value);
+    this. subscription = this.settingsObservableset$.subscribe(
           (response: string) =>
           {
             this._snackBar.open("De instellingen zijn aangepast", "sluit", {duration: 3000});
@@ -71,5 +75,15 @@ export class SettingsComponent implements OnInit {
     }
     return "Geef een geldig e-mailadres"
   }
+
+
+  ngOnDestroy()
+  {
+    this.subscription?.unsubscribe();
+  }
+
+  
+  
 }
+
 

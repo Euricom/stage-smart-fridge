@@ -1,6 +1,6 @@
 <body>
   
-    <table mat-table  *ngIf="(beveragesAndMinimum$ | async)" [dataSource]="$any(beveragesAndMinimum$ | async).tableData  || false" class="mat-elevation-z8">
+    <table mat-table  *ngIf="beveragesAndMinimum$ | async; else loading" [dataSource]="$any(beveragesAndMinimum$ | async).tableData  || false" class="mat-elevation-z8">
 
        
         <ng-container matColumnDef="name">
@@ -18,15 +18,17 @@
         <ng-container matColumnDef="symbol">
             <th mat-header-cell *matHeaderCellDef> Status </th>
             <td mat-cell *matCellDef="let element">
-                <mat-icon *ngIf="element.amount > $any(beveragesAndMinimum$ | async).minAmount" color="primary">favorite</mat-icon>
-                <mat-icon *ngIf="element.amount <= $any(beveragesAndMinimum$ | async).minAmount" color="warn">favorite</mat-icon>
+                <mat-icon *ngIf="element.amount > $any(beveragesAndMinimum$ | async).minAmount" color="primary">thumb_up</mat-icon>
+                <mat-icon *ngIf="element.amount <= $any(beveragesAndMinimum$ | async).minAmount" color="warn">thumb_down</mat-icon>
             </td>
         </ng-container>
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-   
+      <ng-template #loading>
+        Dranken zijn aan het laden
+    </ng-template>
 </body>
 
 

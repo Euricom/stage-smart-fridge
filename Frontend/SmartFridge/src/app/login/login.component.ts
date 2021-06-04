@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {  
+    console.log("hier");
     this.login$ = this.authenticationService.login(this.form?.get('emailAdress')?.value, this.form?.get('password')?.value);
     this. subscription = this.login$.subscribe(
       data =>

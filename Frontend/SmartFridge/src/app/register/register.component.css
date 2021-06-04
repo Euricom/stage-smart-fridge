@@ -4,13 +4,15 @@
 {
     width: 25%;
     margin: auto;
-    margin-top: 5%;
+    margin-top: 2%;
+    text-align: center;
     
 }
 
 .center {
     display: flex;
     justify-content: center;
+    margin-bottom: 5%;
 }
 
 
@@ -31,3 +33,10 @@
     text-decoration: underline;
 }
 
+mat-form-field{
+    width: 60%;
+  }
+ mat-card-title
+{
+    margin-bottom: 7%;
+}

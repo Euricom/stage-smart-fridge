@@ -1,13 +1,13 @@
 <mat-toolbar color="primary" class="app-toolbar">
-    <span class="example-spacer">Smart Fridge</span>
+    <span class="example-spacer" routerLink="/menu/home">Smart Fridge</span>
+
     <button mat-button [matMenuTriggerFor]="navMenu">
-        <mat-icon>visibility</mat-icon>{{name}}
+        <mat-icon>account_circle</mat-icon><span class="text-next-to-icon">{{name}}</span>
     </button>
         <mat-menu #navMenu="matMenu" xPosition="before" color="primary">
             <div color="primary">
-            <p mat-menu-item (click)="logout()" class="plMenuCSS">Loguit</p>
-            <p mat-menu-item  routerLink="/menu/home">Tabel</p>
             <p mat-menu-item  routerLink="/menu/settings">Instellingen</p>
+            <p mat-menu-item (click)="logout()" class="plMenuCSS">Afmelden</p>
             </div>
         </mat-menu>     
 </mat-toolbar>

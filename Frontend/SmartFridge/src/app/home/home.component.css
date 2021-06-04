@@ -4,10 +4,12 @@ body{
 }
 
 
-table {
-    width: 24%;
-    margin: auto;
+table 
+{
+    width: 50%;
     vertical-align: center;
-     /* margin-top: 15%;  */
-    }
+    position:absolute;
+    margin-left: 25%;
+    margin-top: 7%;
+}
     

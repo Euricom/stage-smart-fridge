@@ -96,6 +96,21 @@ namespace Frigo_API_DB.Controllers
         }
 
 
+        // Normaly this isn't needed because I'll convert this in mij Raspi
+        //[HttpPost("TensorFlow")]
+        //public List<RasPiInput> Post(List<TensorFlowModel> Tensor)
+        //{
+        //    List<RasPiInput> makeOldList = new List<RasPiInput>();
+        //    for (int i = 0; i < Tensor.Count(); i++)
+        //    {
+        //        TensorFlow Tens = new TensorFlow(Tensor[i]);
+        //        RasPiInput ras = Tens.ConvertToCustomModel();
+        //        makeOldList.Add(Tens.ConvertToCustomModel());
+        //    }
+        //    return makeOldList;
+        //}
+
+
         [HttpPost("login")]
         public async Task<IActionResult> PostLogin(PersonLoginModel login)
         {
