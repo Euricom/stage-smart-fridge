@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {Router} from '@angular/router'; 
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { UserService } from '../services/users/user.service';
-import { Settings, ISettings } from '../services/users/settings';
+import { Settings} from '../services/users/settings';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { Observable, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 
 @Component({
@@ -14,42 +15,36 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class SettingsComponent implements OnInit {
 
-  ;
+  
 
-  constructor(private authenticationService: AuthenticationService, private route:Router, private userService: UserService, private _snackBar: MatSnackBar) { }
+  constructor(private authenticationService: AuthenticationService, private userService: UserService, private _snackBar: MatSnackBar) { }
 
-  name: string="";
-  panelOpenState = false;
+  subscription: Subscription | undefined;
+  settingsObservableget$: Observable<Settings> | undefined;
+  settingsObservableset$: Observable<string> | undefined;
   checked: boolean = false;
   Settings = new Settings("","",0,false);
-  durationInSeconds = 5;
   
   form: FormGroup = new FormGroup({
-    'Minimum': new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]*$/)]),
-    'Email': new FormControl(null, [Validators.required, Validators.email]),
-    'Checkbox': new FormControl(null)
+    'sendAmount': new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]*$/)]),
+    'emailToSendTo': new FormControl(null, [Validators.required, Validators.email]),
+    'wantToRecieveNotification': new FormControl(null)
   });
+
+  
+
+ 
  
   ngOnInit(): void 
   {
-    
-    this.name = this.authenticationService.getUsername();
-    this.userService.getUserSettings().subscribe(
-      (response: ISettings) =>
-      {
-        this.form.patchValue({"Minimum": response.sendAmount});
-        this.form.patchValue({"Email": response.emailToSendTo});
-        this.form.patchValue({"Checkbox": response.wantToRecieveNotification});
-      },
-      (error) => console.log(error)
-    );
-    
+    this.settingsObservableget$ = this.userService.getUserSettings().pipe(tap(settingsFromService => this.form.patchValue(settingsFromService)));
     
   }
  
   onSubmit() 
   {
-    this.userService.setUserSettingsInServer(this.form.get('Minimum')?.value, this.form.get('Email')?.value, this.form.get('Checkbox')?.value).subscribe(
+    this.settingsObservableset$ = this.userService.setUserSettingsInServer(this.form.get('sendAmount')?.value, this.form.get('emailToSendTo')?.value, this.form.get('wantToRecieveNotification')?.value);
+    this. subscription = this.settingsObservableset$.subscribe(
           (response: string) =>
           {
             this._snackBar.open("De instellingen zijn aangepast", "sluit", {duration: 3000});
@@ -80,10 +75,15 @@ export class SettingsComponent implements OnInit {
     }
     return "Geef een geldig e-mailadres"
   }
- 
-  logout()
+
+
+  ngOnDestroy()
   {
-    this.authenticationService.logout();
-    this.route.navigate(['/login']);
+    this.subscription?.unsubscribe();
   }
+
+  
+  
 }
+
+

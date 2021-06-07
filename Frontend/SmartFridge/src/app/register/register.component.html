@@ -2,72 +2,70 @@
     <mat-toolbar color="primary">
         <span>Smart Fridge</span>
     </mat-toolbar>
-    <mat-card class="card">
-        <!-- TODO: allign this with the boxes, maby scale it up.-->
-        <div class="left">
-            <p class="title">Registreer</p>
-        </div>
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="center">
-                <mat-form-field appearance="fill">
-                    <mat-label>E-mailadres</mat-label>
-                    <input matInput name="email" formControlName="emailAdress">
-                    <button mat-icon-button matSuffix type="button" ></button>
-                    <mat-error *ngIf="!form.get('emailAdress')?.valid">{{getErrorMessageEmail()}}</mat-error>
-                </mat-form-field>
-            </div>
-            <div formGroupName="name">
+    <mat-card class="card" >
+        <mat-card-title>
+            Registreer
+        </mat-card-title>
+        <mat-card-content>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <div class="center">
                     <mat-form-field appearance="fill">
-                        <mat-label>Voornaam</mat-label>
-                        <input matInput name="FirstName"  formControlName="FirstName">
-                        <button mat-icon-button matSuffix type="button"></button>
-                        <mat-error *ngIf="!form.get('name.FirstName')?.valid">{{getErrorMessageFirstName()}}</mat-error>
+                        <mat-label>E-mailadres</mat-label>
+                        <input matInput name="email" formControlName="emailAdress">
+                        <mat-error *ngIf="!form.get('emailAdress')?.valid">{{getErrorMessageEmail()}}</mat-error>
                     </mat-form-field>
                 </div>
-                <div class="center">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Achternaam</mat-label>
-                        <input matInput name="LastMame"  formControlName="LastName">
-                        <button mat-icon-button matSuffix type="button"></button>
-                        <mat-error *ngIf="!form.get('name.LastName')?.valid">{{getErrorMessageLastName()}}</mat-error>
-                    </mat-form-field>
+                <div formGroupName="name">
+                    <div class="center">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Voornaam</mat-label>
+                            <input matInput name="FirstName"  formControlName="FirstName">
+                            <mat-error *ngIf="!form.get('name.FirstName')?.valid">{{getErrorMessageFirstName()}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="center">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Achternaam</mat-label>
+                            <input matInput name="LastMame"  formControlName="LastName">
+                            <mat-error *ngIf="!form.get('name.LastName')?.valid">{{getErrorMessageLastName()}}</mat-error>
+                        </mat-form-field>
+                    </div>
                 </div>
-            </div>
-            <div formGroupName="passwords">
-                <div class="center">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Wachtwoord</mat-label>
-                        <input matInput [type]="hide ? 'password' : 'text'" name="password" formControlName="password" (change)="form.get('passwords.passwordRepeat')?.updateValueAndValidity() ">
-                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
-                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </button>
-                        <mat-error *ngIf="!form.get('passwords.password')?.valid">{{getErrorMessagePasswordPasword()}}</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="center">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Herhaal wachtwoord</mat-label>
+                <div formGroupName="passwords">
+                    <div class="center">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Wachtwoord</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" name="password" formControlName="password" (change)="form.get('passwords.passwordRepeat')?.updateValueAndValidity() ">
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="!form.get('passwords.password')?.valid">{{getErrorMessagePasswordPasword()}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="center">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Herhaal wachtwoord</mat-label>
 
-                        <input matInput [type]="hide ? 'password' : 'text'" name="passwordRepeat"  formControlName="passwordRepeat" appConfirmEqualValidator="password">
-                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
-                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </button>
-                        <mat-error *ngIf="!form.get('passwords.passwordRepeat')?.valid">{{getErrorMessagePasswordPaswordRepead()}}</mat-error>
-                    </mat-form-field>
-                    
+                            <input matInput [type]="hide ? 'password' : 'text'" name="passwordRepeat"  formControlName="passwordRepeat" appConfirmEqualValidator="password">
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="!form.get('passwords.passwordRepeat')?.valid">{{getErrorMessagePasswordPaswordRepead()}}</mat-error>
+                        </mat-form-field>
+                        
+                    </div>
                 </div>
-            </div>
-            <div *ngIf="servererror" class="center">
-                <p>{{errorToShow}}</p>
-            </div>
+                <div *ngIf="servererror" class="center">
+                    <p>{{errorToShow}}</p>
+                </div>
 
+                <div class="center">
+                    <button  mat-raised-button  color="primary" [disabled]="!form.valid" type="submit">Registreer</button>
+                </div>
+            </form>
             <div class="center">
-                <button  mat-raised-button  color="primary" [disabled]="!form.valid" type="submit">Registreer</button>
+                <p class="rederectLink" routerLink="/login">Al een account?</p>
             </div>
-        </form>
-        <div class="center">
-            <p class="rederectLink" routerLink="/login">Al een account?</p>
-        </div>
+        </mat-card-content>
     </mat-card>
 </body>

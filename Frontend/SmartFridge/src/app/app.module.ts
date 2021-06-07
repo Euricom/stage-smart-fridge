@@ -27,6 +27,8 @@ import { AuthenticationService } from './services/authentication/authentication.
  import { UserService } from './services/users/user.service';
  import { ConfirmEqualValidator } from './models/confirmEqualValidator';
  import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MenuComponent } from './menu/menu.component';
+import {DatePipe} from '@angular/common';
 
 
 
@@ -39,7 +41,8 @@ import { AuthenticationService } from './services/authentication/authentication.
     LoginComponent,
     RegisterComponent,
     SettingsComponent,
-    ConfirmEqualValidator
+    ConfirmEqualValidator,
+    MenuComponent
   ],
   imports: [
     FormsModule,
@@ -69,7 +72,8 @@ import { AuthenticationService } from './services/authentication/authentication.
     AuthenticationService, 
     AuthGuardService, 
     TableService,
-    UserService
+    UserService,
+    DatePipe
     ],
   
   bootstrap: [AppComponent]

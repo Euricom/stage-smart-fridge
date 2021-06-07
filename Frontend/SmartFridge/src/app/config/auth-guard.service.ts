@@ -1,7 +1,5 @@
-import { Route } from '@angular/compiler/src/core';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanLoad, Router, RouterStateSnapshot } from '@angular/router';
-import { promise } from 'protractor';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../services/authentication/authentication.service'
 
@@ -18,7 +16,8 @@ export class AuthGuardService implements CanActivate{
     {
       return true;
     }
-    return this.router.navigate(['/login'])
+    this.authenticationService.logout();
+    return this.router.navigate(['/login']);
   }
 
 

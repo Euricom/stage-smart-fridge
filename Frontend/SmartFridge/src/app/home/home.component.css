@@ -1,19 +1,15 @@
-.example-spacer {
-    flex: 1 1 auto;
-  }
 
 body{
     background-color: #EDEDEF;
 }
 
-div.plMenuCSS { 
-    max-width:500px;
-    background-color:lightgreen;
-    }
 
-table {
-    width: 24%;
-    margin: auto;
-
-    margin-top: 15%;
-    }
+table 
+{
+    width: 50%;
+    vertical-align: center;
+    position:absolute;
+    margin-left: 25%;
+    margin-top: 7%;
+}
+    

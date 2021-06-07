@@ -1,28 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication/authentication.service'
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {Router} from '@angular/router'; 
+import { Observable, Subscription } from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
 
-  
- 
+  subscription: Subscription | undefined;
+  registerNewPerson$: Observable<string> | undefined;
   hide: boolean = true;
+  wrongEmailAdresses: string[] = [];
   
   errorToShow: string = "";
   servererror: boolean = false;
   //This checks that the password contains atleast 1 capital letter, 1 small letter, 1 special karakter, 1 number and in total 8 karakters
   passwordValidator: string = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
  
-  constructor(private authenticationService:  AuthenticationService, private route:Router) { }
-
+  constructor(private authenticationService:  AuthenticationService, private route:Router, private _snackBar: MatSnackBar) { }
+  
+  
   form: FormGroup = new FormGroup({
-    'emailAdress': new FormControl(null, [Validators.required, Validators.email]),
+    'emailAdress': new FormControl(null, [Validators.required, Validators.email, this.forbiddenNameValidator(this.wrongEmailAdresses)]),
     'passwords': new FormGroup({
       'password': new FormControl(null, [Validators.required, Validators.pattern(this.passwordValidator)]),
       'passwordRepeat': new FormControl(null, [Validators.required, Validators.pattern(this.passwordValidator)])
@@ -41,6 +45,9 @@ export class RegisterComponent implements OnInit {
   getErrorMessageEmail() {
     if (this.form.get('emailAdress')?.hasError('required')) {
       return 'Je moet een e-mailadres geven';
+    }
+    if (this.form.get('emailAdress')?.hasError('emailAlreadyInUse')) {
+      return 'Dit e-mailadres wordt al gebruikt';
     }
     return "Geef een geldig e-mailadres"
   }
@@ -84,31 +91,42 @@ export class RegisterComponent implements OnInit {
     return "Dit is geen geldige achternaam"
   }
 
-  
-
-
-  samePasswords(passwordToControl: FormControl): {[s: string]: boolean} | null
-  {
-    if(this.form?.get('passwords.password')?.value != this.form?.get('passwords.passwordRepeat')?.value)
-    {
-      return{ 'passwordsNotMatching': true};
-    }
-    return null;
-  }
-
-  
 
   onSubmit() {
-    this.authenticationService.registerNewPerson(this.form?.get('emailAdress')?.value, this.form?.get('passwords.password')?.value, this.form?.get('name.FirstName')?.value, this.form?.get('name.LastName')?.value).subscribe(
+    this.registerNewPerson$ = this.authenticationService.registerNewPerson(this.form?.get('emailAdress')?.value, this.form?.get('passwords.password')?.value, this.form?.get('name.FirstName')?.value, this.form?.get('name.LastName')?.value);
+    this. subscription = this.registerNewPerson$.subscribe(
       data =>
       {
+        this._snackBar.open("U gebruiker is toegevoegd", "sluit", {duration: 3000});
         this.route.navigate(['/login']);
       },
       recievedError =>
       {
-        this.CheckError(recievedError.error.message);
+        this.emailAlreadyInUse();
+        //this line is needed because this way the field'll be activated and the error message 'll be shown
+        this.form.controls["emailAdress"].setValue(this.form.get('emailAdress')?.value);
       }
     );
+  }
+
+   emailAlreadyInUse()
+  {
+    this.wrongEmailAdresses.push(this.form.get('emailAdress')?.value);
+  }
+
+
+  forbiddenNameValidator(emailList: string[]): ValidatorFn {
+    console.log("hier");
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      for (let i = 0; i < emailList.length; i++)
+      {
+        if(emailList[i] == this.form.get("emailAdress")?.value)
+        {
+          return {'emailAlreadyInUse': true}
+        }
+      }
+      return null;
+    };
   }
 
   CheckError(error : string)
@@ -136,6 +154,11 @@ export class RegisterComponent implements OnInit {
          break; 
       } 
    }
+  }
+
+  ngOnDestroy()
+  {
+    this.subscription?.unsubscribe();
   }
 
 }
