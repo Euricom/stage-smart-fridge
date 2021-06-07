@@ -44,7 +44,11 @@ steps:
   inputs:
     folderPath: '$(System.DefaultWorkingDirectory)/**/*.zip'
     fileType: 'json'
-    targetFiles: '**/appsettings.json'
+    targetFiles: '- task: FileTransform@1
+
+
+
+
 
 #deploy on azure to connect through internet    
 - task: AzureRmWebAppDeployment@4
