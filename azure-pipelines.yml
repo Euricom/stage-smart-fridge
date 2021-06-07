@@ -56,7 +56,6 @@ steps:
 #     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 
-
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
