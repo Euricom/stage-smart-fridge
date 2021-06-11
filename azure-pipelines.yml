@@ -47,12 +47,21 @@ steps:
     targetFiles: '**/appsettings.json'
 
 #deploy on azure to connect through internet
+# - task: AzureRmWebAppDeployment@4
+#   inputs:
+#     ConnectionType: 'AzureRM'
+#     azureSubscription: 'Visual Studio Enterprise-abonnement – MPN(af06843c-c958-4e79-925d-145d2e54d2fd)'
+#     appType: 'webApp'
+#     WebAppName: 'FrigoAPIEuricom'
+#     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: 'Visual Studio Enterprise-abonnement – MPN(af06843c-c958-4e79-925d-145d2e54d2fd)'
+    azureSubscription: 'Visual Studio Enterprise-abonnement – MPN(3)(7305dcef-fd4a-43cc-b542-91aba0e6c7b1)'
     appType: 'webApp'
-    WebAppName: 'FrigoAPIEuricom'
+    WebAppName: 'smartfridge-backend'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 
