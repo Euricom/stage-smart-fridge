@@ -39,26 +39,26 @@ namespace Frigo_API_DB
             //Verdelen per tagnaam
             for(int i = 0; i < dranken.Count(); i++)
             {
-                if(dranken[i].Tagname == "Cola-blik" && dranken[i].Probability > 0.40)
+                if(dranken[i].Tagname == "ColaCan" && dranken[i].Probability > 0.40)
                 {
                     this.cola.Add(dranken[i]);
                 }
 
-                else if (dranken[i].Tagname == "Fanta" && dranken[i].Probability > 0.40)
+                else if (dranken[i].Tagname == "FantaCan" && dranken[i].Probability > 0.40)
                 {
                     this.fanta.Add(dranken[i]);
                 }
 
-                else if (dranken[i].Tagname == "Sprite-Lemon-blik" && dranken[i].Probability > 0.40)
+                else if (dranken[i].Tagname == "SpriteLemonCan" && dranken[i].Probability > 0.40)
                 {
                     this.sprite.Add(dranken[i]);
                 }
 
-                else if (dranken[i].Tagname == "bovenkant" && dranken[i].Probability > 0.40)
+                else if (dranken[i].Tagname == "Upperside" && dranken[i].Probability > 0.40)
                 {
                     upperSideList.Add(dranken[i]);
                 }
-                else if (dranken[i].Tagname == "VluchtLijn" && dranken[i].Probability > 0)
+                else if (dranken[i].Tagname == "Vanishingline" && dranken[i].Probability > 0)
                 {
                     VanishingLineCircumference.Add(dranken[i]);
                 }

@@ -102,6 +102,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       },
       recievedError =>
       {
+        console.log(recievedError)
         this.emailAlreadyInUse();
         //this line is needed because this way the field'll be activated and the error message 'll be shown
         this.form.controls["emailAdress"].setValue(this.form.get('emailAdress')?.value);

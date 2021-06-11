@@ -16,6 +16,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
+using MailKit.Net.Smtp;
+using MimeKit;
+
+
+
+
+//using System;
+//using System.Net;
+//using System.Net.Mail;
+//using System.Net.Mime;
+//using System.Threading;
+//using System.ComponentModel;
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Frigo_API_DB.Controllers
@@ -71,13 +84,17 @@ namespace Frigo_API_DB.Controllers
 
         // GET api/<FrigoController>/5
         [HttpGet("id")]
-        public string Get(int id)
+        public async void Get(int id)
         {
-            return "value";
+            SendMail send = new SendMail();
+            string email = "matthias.hernalsteen@gmail.com";
+            var tableData = frigoContext.Hoeveelheden.ToList();
+            await send.Execute(email, tableData);
+            //return "value";
         }
 
         [HttpPost("rasPi")]
-        public string Post(List<RasPiInput> dr)
+        public async Task<string> Post(List<RasPiInput> dr)
         {
             // data opsturen naar de berekeningen, uitrekenen en dan met de list data opslaan.
             Calculating rekenen = new Calculating();
@@ -92,8 +109,39 @@ namespace Frigo_API_DB.Controllers
                 drankje.Amount = aantallen[i].Amount;
                 frigoContext.SaveChanges();
             }
+            await email();
             return "Good";
         }
+        // oplossing zoeken voor dit async gedeelte.
+        private async Task email()
+        {
+            SendMail send = new SendMail();
+            var persons = frigoContext.Persons.ToArray();
+            for (int i = 0; i < persons.Count(); i++)
+            {
+                Settings set = frigoContext.Settings.Where(s => s.UserId == persons[i].Id).FirstOrDefault();
+                if (set.WantToRecieveNotification)
+                {
+                    string email = set.EmailToSendTo;
+                    var tableData = frigoContext.Hoeveelheden.ToList();
+                    Boolean sendTheMail = false;
+                    for (int j = 0; j < tableData.Count(); j++)
+                    {
+                        if(tableData[j].Amount <= set.SendAmount)
+                        {
+                            sendTheMail = true;
+                            break;
+                        }
+                    }
+                    if (sendTheMail)
+                    {
+                        await send.Execute(email, tableData);
+                    }
+                }
+            }
+        }
+
+
 
 
         // Normaly this isn't needed because I'll convert this in mij Raspi

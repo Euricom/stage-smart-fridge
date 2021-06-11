@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://frigoapieuricom.azurewebsites.net'
+  apiUrl: 'https://smartfridge-backend.azurewebsites.net'
 };

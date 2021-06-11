@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:5001'
+  //apiUrl: 'https://localhost:5001'
+  apiUrl: 'https://smartfridge-backend.azurewebsites.net'
 };
 /*
  * For easier debugging in development mode, you can import the following file
