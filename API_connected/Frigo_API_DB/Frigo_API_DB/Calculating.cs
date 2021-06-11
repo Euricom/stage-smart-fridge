@@ -58,7 +58,7 @@ namespace Frigo_API_DB
                 {
                     upperSideList.Add(dranken[i]);
                 }
-                else if (dranken[i].Tagname == "Vanishingline" && dranken[i].Probability > 0)
+                else if (dranken[i].Tagname == "VanishingLine" && dranken[i].Probability > 0)
                 {
                     VanishingLineCircumference.Add(dranken[i]);
                 }
